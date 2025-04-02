@@ -3,10 +3,15 @@ import Foundation
 public final class SWService: SWPlanetsProvider {
 	private let session: URLSession
 	
-	public init(session: URLSession = .init(configuration: .default, delegate: nil, delegateQueue: nil),
-							fetchPlanets: @escaping () async throws -> PlanetsResponse) {
-		session.configuration.urlCache = URLCache()
-		session.configuration.requestCachePolicy = .returnCacheDataElseLoad
+	public init(
+		session: URLSession = .init(
+			configuration: .default,
+			delegate: nil,
+			delegateQueue: nil
+		),
+		fetchPlanets: @escaping () async throws -> PlanetsResponse) {
+			session.configuration.urlCache = URLCache()
+			session.configuration.requestCachePolicy = .returnCacheDataElseLoad
 		
 		self.session = session
 		self.fetchPlanets = fetchPlanets
@@ -16,21 +21,6 @@ public final class SWService: SWPlanetsProvider {
 }
 
 extension SWService {
-	public static let live = SWService {
-		guard let url = URL(string: Constants.baseURL) else {
-			throw SWError.invalidURL
-		}
-		
-		let (data, response) = try await URLSession.shared.data(for: URLRequest(url: url))
-		
-		guard let response = response as? HTTPURLResponse,
-					(200...399).contains(response.statusCode) else {
-			throw SWError.invalidResponse
-		}
-		
-		return try JSONDecoder().decode(PlanetsResponse.self, from: data)
-	}
-	
 	static let test = SWService {
 		.init(
 			count: 1,

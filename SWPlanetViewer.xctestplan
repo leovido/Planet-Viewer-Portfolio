@@ -1,0 +1,38 @@
+{
+  "configurations" : [
+    {
+      "id" : "02585C5E-99F2-4FBE-B703-B8BC5DEB8339",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:SWPlanetViewer.xcodeproj",
+      "identifier" : "47355E652D9BE5D600E8339A",
+      "name" : "SWPlanetViewer"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:SWPlanetViewer.xcodeproj",
+        "identifier" : "47355E752D9BE5D700E8339A",
+        "name" : "SWPlanetViewerTests"
+      }
+    },
+    {
+      "enabled" : false,
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:SWPlanetViewer.xcodeproj",
+        "identifier" : "47355E7F2D9BE5D700E8339A",
+        "name" : "SWPlanetViewerUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		47D0E98B2D9CC78000E81A7E /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 47D0E98A2D9CC78000E81A7E /* Config.xcconfig */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		47355E772D9BE5D700E8339A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		47355E662D9BE5D600E8339A /* SWPlanetViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SWPlanetViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		47355E762D9BE5D700E8339A /* SWPlanetViewerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SWPlanetViewerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		47355E802D9BE5D700E8339A /* SWPlanetViewerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SWPlanetViewerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		47D0E98A2D9CC78000E81A7E /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +80,7 @@
 		47355E5D2D9BE5D600E8339A = {
 			isa = PBXGroup;
 			children = (
+				47D0E98A2D9CC78000E81A7E /* Config.xcconfig */,
 				47355E682D9BE5D600E8339A /* SWPlanetViewer */,
 				47355E792D9BE5D700E8339A /* SWPlanetViewerTests */,
 				47355E832D9BE5D700E8339A /* SWPlanetViewerUITests */,
@@ -102,6 +108,7 @@
 				47355E622D9BE5D600E8339A /* Sources */,
 				47355E632D9BE5D600E8339A /* Frameworks */,
 				47355E642D9BE5D600E8339A /* Resources */,
+				47D0E92C2D9C25C900E81A7E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -212,6 +219,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47D0E98B2D9CC78000E81A7E /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,6 +238,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		47D0E92C2D9C25C900E81A7E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "  swiftlint lint --config .swiftlint.yml\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		47355E622D9BE5D600E8339A /* Sources */ = {
@@ -398,6 +426,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"SWPlanetViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = HL92L2PJSU;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -427,6 +456,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"SWPlanetViewer/Preview Content\"";
 				DEVELOPMENT_TEAM = HL92L2PJSU;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

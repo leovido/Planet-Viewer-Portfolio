@@ -7,4 +7,7 @@
    <FileRef
       location = "container:SWPlanetViewer.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:SWPlanetViewer.xctestplan">
+   </FileRef>
 </Workspace>
