@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import StarWarsFeature
 
 struct ContentView: View {
 	var body: some View {

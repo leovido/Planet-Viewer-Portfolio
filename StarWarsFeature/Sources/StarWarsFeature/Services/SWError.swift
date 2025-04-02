@@ -1,6 +1,6 @@
 import Foundation
 
-public enum SWError: Error  {
+public enum SWError: Error {
 	case invalidURL
 	case invalidResponse
 	case message(String)
