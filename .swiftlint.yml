@@ -1,0 +1,53 @@
+indentation_width: 2
+cyclomatic_complexity:
+  warning: 10
+  error: 20
+file_length:
+  warning: 500
+  error: 1000
+function_body_length: 
+  warning: 50
+function_parameter_count: 5
+line_length:
+  warning: 120
+  error: 150
+  ignores_function_declarations: true
+  ignores_comments: true
+  ignores_urls: true
+type_body_length: 300
+variable_name:
+  min_length:
+    error: 1
+  excluded:
+    - N
+
+disabled_rules:
+  - identifier_name
+  - trailing_whitespace
+
+opt_in_rules:
+  - opening_brace
+  - closure_end_indentation
+  - closure_spacing
+  - empty_count
+  - explicit_init
+  - first_where
+  - operator_usage_whitespace
+  - redundant_nil_coalescing
+  - vertical_parameter_alignment_on_call
+
+force_cast: error 
+force_try:
+  severity: error
+  
+excluded:
+  - "**/*Tests.swift"
+  - Pods
+  - Carthage
+  - fastlane
+  
+reporter: "xcode"
+
+included:
+  - SWPlanetViewer
+  - StarWarsFeature/Sources
