@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		47D0E98B2D9CC78000E81A7E /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 47D0E98A2D9CC78000E81A7E /* Config.xcconfig */; };
+		47D0E98E2D9CCE5700E81A7E /* StarWarsFeature in Frameworks */ = {isa = PBXBuildFile; productRef = 47D0E98D2D9CCE5700E81A7E /* StarWarsFeature */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47D0E98E2D9CCE5700E81A7E /* StarWarsFeature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +86,7 @@
 				47355E682D9BE5D600E8339A /* SWPlanetViewer */,
 				47355E792D9BE5D700E8339A /* SWPlanetViewerTests */,
 				47355E832D9BE5D700E8339A /* SWPlanetViewerUITests */,
+				47D0E98C2D9CCE5700E81A7E /* Frameworks */,
 				47355E672D9BE5D600E8339A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -96,6 +99,13 @@
 				47355E802D9BE5D700E8339A /* SWPlanetViewerUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		47D0E98C2D9CCE5700E81A7E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -119,6 +129,7 @@
 			);
 			name = SWPlanetViewer;
 			packageProductDependencies = (
+				47D0E98D2D9CCE5700E81A7E /* StarWarsFeature */,
 			);
 			productName = SWPlanetViewer;
 			productReference = 47355E662D9BE5D600E8339A /* SWPlanetViewer.app */;
@@ -588,6 +599,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		47D0E98D2D9CCE5700E81A7E /* StarWarsFeature */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = StarWarsFeature;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 47355E5E2D9BE5D600E8339A /* Project object */;
 }
