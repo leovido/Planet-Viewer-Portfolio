@@ -14,11 +14,11 @@ struct StarWarsCrawlView: View {
 					.foregroundColor(.blue)
 					.multilineTextAlignment(.center)
 					.offset(y: crawlOffset)
-//					.onAppear {
-//						withAnimation(.easeInOut(duration: 6.0)) {
-//							crawlOffset = -300
-//						}
-//					}
+					.onAppear {
+						withAnimation(.easeInOut(duration: 6.0)) {
+							crawlOffset = -300
+						}
+					}
 				Spacer()
 			}
 		}

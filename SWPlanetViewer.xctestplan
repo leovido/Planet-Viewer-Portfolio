@@ -13,7 +13,8 @@
       "containerPath" : "container:SWPlanetViewer.xcodeproj",
       "identifier" : "47355E652D9BE5D600E8339A",
       "name" : "SWPlanetViewer"
-    }
+    },
+    "testExecutionOrdering" : "random"
   },
   "testTargets" : [
     {

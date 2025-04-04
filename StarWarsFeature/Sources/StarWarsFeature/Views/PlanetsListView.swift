@@ -1,14 +1,13 @@
 import SwiftUI
-import StarWarsFeature
 
-struct PlanetsListView: View {
+public struct PlanetsListView: View {
 	@ObservedObject private var viewModel: SWViewModel
 	
-	init(viewModel: SWViewModel) {
+	public init(viewModel: SWViewModel) {
 		self.viewModel = viewModel
 	}
 	
-	var body: some View {
+	public var body: some View {
 		Group {
 			ScrollView {
 				ForEach(viewModel.planetListItems) { planet in

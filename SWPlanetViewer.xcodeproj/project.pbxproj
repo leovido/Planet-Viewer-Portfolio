@@ -46,11 +46,6 @@
 			path = SWPlanetViewerTests;
 			sourceTree = "<group>";
 		};
-		47355E832D9BE5D700E8339A /* SWPlanetViewerUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = SWPlanetViewerUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,7 +80,6 @@
 				47D0E98A2D9CC78000E81A7E /* Config.xcconfig */,
 				47355E682D9BE5D600E8339A /* SWPlanetViewer */,
 				47355E792D9BE5D700E8339A /* SWPlanetViewerTests */,
-				47355E832D9BE5D700E8339A /* SWPlanetViewerUITests */,
 				47D0E98C2D9CCE5700E81A7E /* Frameworks */,
 				47355E672D9BE5D600E8339A /* Products */,
 			);
@@ -170,9 +164,6 @@
 			);
 			dependencies = (
 				47355E822D9BE5D700E8339A /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				47355E832D9BE5D700E8339A /* SWPlanetViewerUITests */,
 			);
 			name = SWPlanetViewerUITests;
 			packageProductDependencies = (
@@ -452,7 +443,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.christianleovido.SWPlanetViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -482,7 +473,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.christianleovido.SWPlanetViewer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

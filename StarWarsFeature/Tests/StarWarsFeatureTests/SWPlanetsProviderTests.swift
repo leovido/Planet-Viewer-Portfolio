@@ -22,6 +22,8 @@ final class SWPlanetsProviderTests: XCTestCase {
 	func testFetchPlanetsError() async throws {
 		planetsService = SWService(fetchPlanets: {
 			throw SWError.invalidResponse
+		}, fetchPeople: {
+			throw SWError.invalidResponse
 		})
 		
 		do {
@@ -36,6 +38,8 @@ final class SWPlanetsProviderTests: XCTestCase {
 	func testFetchPlanetsErrorInvalidURL() async throws {
 		planetsService = SWService(fetchPlanets: {
 			throw SWError.invalidURL
+		}, fetchPeople: {
+			throw SWError.invalidURL
 		})
 		
 		do {
@@ -49,6 +53,8 @@ final class SWPlanetsProviderTests: XCTestCase {
 	
 	func testFetchPlanetsCustomError() async throws {
 		planetsService = SWService(fetchPlanets: {
+			throw SWError.message("Custom message from backend")
+		}, fetchPeople: {
 			throw SWError.message("Custom message from backend")
 		})
 		

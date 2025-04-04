@@ -3,7 +3,7 @@ import StarWarsFeature
 import Combine
 import Foundation
 
-struct ContentView: View {
+struct MainView: View {
 	@StateObject private var viewModel: SWViewModel = .init()
 	
 	var body: some View {
@@ -35,5 +35,5 @@ struct ContentView: View {
 }
 
 #Preview {
-	ContentView()
+	MainView()
 }

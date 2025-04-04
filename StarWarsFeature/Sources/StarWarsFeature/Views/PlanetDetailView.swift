@@ -1,11 +1,15 @@
 import SwiftUI
-import StarWarsFeature
 
-struct PlanetDetailView: View {
-	@ObservedObject var viewModel: SWPlanetDetailViewModel	
+public struct PlanetDetailView: View {
+	@ObservedObject var viewModel: SWPlanetDetailViewModel
 	@State private var showingMoreInfo = true
 	
-	var body: some View {
+	init(viewModel: SWPlanetDetailViewModel, showingMoreInfo: Bool = true) {
+		self.viewModel = viewModel
+		self.showingMoreInfo = showingMoreInfo
+	}
+	
+	public var body: some View {
 		ScrollView {
 			VStack(alignment: .leading, spacing: 20) {
 				HStack {

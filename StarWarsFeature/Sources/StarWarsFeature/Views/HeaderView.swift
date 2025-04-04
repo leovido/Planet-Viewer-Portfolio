@@ -1,10 +1,13 @@
 import SwiftUI
-import StarWarsFeature
 
-struct HeaderView: View {
+public struct HeaderView: View {
 	@ObservedObject var viewModel: SWViewModel
 	
-	var body: some View {
+	public init(viewModel: SWViewModel) {
+		self.viewModel = viewModel
+	}
+	
+	public var body: some View {
 		ScrollView(.horizontal) {
 			HStack(spacing: 10) {
 				Button {

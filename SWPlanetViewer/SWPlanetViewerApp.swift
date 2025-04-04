@@ -4,7 +4,7 @@ import SwiftUI
 struct SWPlanetViewerApp: App {
 	var body: some Scene {
 		WindowGroup {
-			ContentView()
+			MainView()
 				.preferredColorScheme(.dark)
 		}
 	}

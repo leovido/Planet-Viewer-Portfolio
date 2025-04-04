@@ -1,5 +1,4 @@
 import SwiftUI
-import StarWarsFeature
 
 struct PlanetCard: View {
 	let planet: PlanetListItem

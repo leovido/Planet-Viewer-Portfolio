@@ -1,14 +1,9 @@
 import SwiftUI
-import StarWarsFeature
 
-struct PlanetRowView: View {
+public struct PlanetRowView: View {
 	let planet: SWPlanet
 	
-	var populationFormatted: String {
-		Decimal(string: planet.population)?.formatted(.number) ?? "N/A"
-	}
-	
-	var body: some View {
+	public var body: some View {
 		HStack {
 			VStack(alignment: .leading, spacing: 4) {
 				Text(planet.name)
@@ -16,7 +11,7 @@ struct PlanetRowView: View {
 				Text("\(planet.terrain.uppercased())")
 					.font(.subheadline)
 					.foregroundColor(.gray)
-				Text("Pop: \(populationFormatted)")
+				Text("Pop: \(planet.population)")
 					.font(.subheadline)
 					.foregroundColor(.gray)
 			}
