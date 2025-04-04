@@ -11,8 +11,14 @@ struct PlanetsListView: View {
 	var body: some View {
 		Group {
 			ScrollView {
-				ForEach(viewModel.model.planets) { planet in
-					NavigationLink(destination: PlanetDetailView(planet: planet)) {
+				ForEach(viewModel.planetListItems) { planet in
+					NavigationLink(
+						destination: PlanetDetailView(
+							viewModel: SWPlanetDetailViewModel(
+								planet: viewModel.model.planets
+									.first(where: { $0.id == planet.id }) ?? SWPlanet.default)
+						)
+					) {
 						PlanetCard(planet: planet)
 					}
 					.padding(.vertical, 4)
