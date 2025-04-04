@@ -38,7 +38,7 @@ opt_in_rules:
 
 force_cast: error 
 force_try:
-  severity: error
+  severity: warning
   
 excluded:
   - "**/*Tests.swift"

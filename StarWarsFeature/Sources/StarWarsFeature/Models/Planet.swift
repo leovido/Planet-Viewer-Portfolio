@@ -1,10 +1,10 @@
 import Foundation
 
-public struct PlanetsResponse: Codable, Hashable, Sendable {
+public struct SWPlanetsResponse: Codable, Hashable, Sendable {
 	public let count: Int
 	public let next: String
 	public let previous: String?
-	public let planets: [Planet]
+	public let planets: [SWPlanet]
 	
 	enum CodingKeys: String, CodingKey {
 		case count, next, previous
@@ -12,7 +12,7 @@ public struct PlanetsResponse: Codable, Hashable, Sendable {
 	}
 }
 
-public struct Planet: Identifiable, Codable, Hashable, Sendable {
+public struct SWPlanet: Identifiable, Codable, Hashable, Sendable {
 	public let id: String = UUID().uuidString
 
 	public let name, rotationPeriod, orbitalPeriod, diameter: String
@@ -49,8 +49,8 @@ public struct Planet: Identifiable, Codable, Hashable, Sendable {
 	}
 }
 
-extension PlanetsResponse {
-	static var noop: PlanetsResponse {
+extension SWPlanetsResponse {
+	public static var noop: SWPlanetsResponse {
 		.init(count: 0, next: "", previous: nil, planets: [])
 	}
 }

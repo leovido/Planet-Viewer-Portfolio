@@ -2,7 +2,7 @@ import SwiftUI
 import StarWarsFeature
 
 struct PlanetDetailView: View {
-	let planet: Planet
+	let planet: SWPlanet
 	@Environment(\.dismiss) private var dismiss
 	@Environment(\.dynamicTypeSize) private var dynamicTypeSize
 	@State private var showingMoreInfo = false
@@ -68,8 +68,8 @@ struct PlanetDetailView: View {
 				
 				// Main information card
 				VStack(alignment: .leading, spacing: 15) {
-					infoRow(label: "Climate", value: planet.climate)
-					infoRow(label: "Terrain", value: planet.terrain)
+					infoRow(label: "Climate", value: planet.climate.capitalized)
+					infoRow(label: "Terrain", value: planet.terrain.capitalized)
 					infoRow(label: "Surface Water", value: "\(planet.surfaceWater)%")
 					infoRow(label: "Population", value: formatPopulation(planet.population))
 				}
@@ -150,32 +150,31 @@ struct PlanetDetailView: View {
 	}
 	
 	private func formatPopulation(_ population: String) -> String {
-		guard let popNumber = Double(population) else {
+		guard let population = Decimal(string: population) else {
 			return population
 		}
-		
 		let formatter = NumberFormatter()
 		formatter.numberStyle = .decimal
 		formatter.maximumFractionDigits = 1
 		
-		if popNumber >= 1_000_000_000 {
-			let billions = popNumber / 1_000_000_000
-			return "\(formatter.string(from: NSNumber(value: billions)) ?? "") billion"
-		} else if popNumber >= 1_000_000 {
-			let millions = popNumber / 1_000_000
-			return "\(formatter.string(from: NSNumber(value: millions)) ?? "") million"
-		} else if popNumber >= 1_000 {
-			let thousands = popNumber / 1_000
-			return "\(formatter.string(from: NSNumber(value: thousands)) ?? "") thousand"
+		if population >= 1_000_000_000 {
+			let billions = population / 1_000_000_000
+			return "\(billions.formatted(.number)) billion"
+		} else if population >= 1_000_000 {
+			let millions = population / 1_000_000
+			return "\(millions.formatted(.number)) million"
+		} else if population >= 1_000 {
+			let thousands = population / 1_000
+			return "\(thousands.formatted(.number)) thousand"
 		} else {
-			return formatter.string(from: NSNumber(value: popNumber)) ?? population
+			return population.formatted(.number)
 		}
 	}
 }
 
 #Preview {
 	NavigationStack {
-		PlanetDetailView(planet: Planet(
+		PlanetDetailView(planet: SWPlanet(
 			name: "Tatooine",
 			rotationPeriod: "23",
 			orbitalPeriod: "304",
@@ -197,7 +196,7 @@ struct PlanetDetailView: View {
 // Add another preview to show adapting to dynamic type
 #Preview("Large Dynamic Type") {
 	NavigationStack {
-		PlanetDetailView(planet: Planet(
+		PlanetDetailView(planet: SWPlanet(
 			name: "Naboo",
 			rotationPeriod: "26",
 			orbitalPeriod: "312",
