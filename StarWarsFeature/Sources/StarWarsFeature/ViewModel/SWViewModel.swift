@@ -1,5 +1,4 @@
 import SwiftUI
-import Combine
 import Foundation
 
 extension SWViewModel {
@@ -14,23 +13,21 @@ extension SWViewModel {
 @MainActor
 public final class SWViewModel: ObservableObject {
 	@Published public var model: SWPlanetsResponse = .noop
-	@Published public var planetListItems: [PlanetListItem] = []
 	@Published public var selectedPlanetDetail: PlanetDetail?
-	
 	@Published public var error: SWError?
 	@Published public var isLoading: Bool = false
 	
-	private var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
-
-	public let action: PassthroughSubject<SWAction, Never> = .init()
-	private(set) var cancellables: Set<AnyCancellable> = []
+	public var artificialDelay: Duration = .zero
 	
+	public var planetListItems: [PlanetListItem] {
+		model.planets.map { PlanetListItem(from: $0) }
+	}
+	
+	private var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
 	private let service: SWPlanetsProvider
 	
 	deinit {
-		inFlightTasks.forEach({
-			$1.cancel()
-		})
+		inFlightTasks.forEach { $0.value.cancel() }
 	}
 	
 	public init(
@@ -43,42 +40,30 @@ public final class SWViewModel: ObservableObject {
 		self.error = error
 		self.isLoading = isLoading
 		self.service = service
-		
-		setupActionHandlers()
 	}
 	
-	private func setupActionHandlers() {
-		let sharedAction = action.share()
-		
-		sharedAction
-			.filter { $0 == .onAppear || $0 == .didTapPill(0) }
-			.handleEvents(receiveRequest: { [weak self] _ in
-				self?.isLoading = true
-			})
-			.sink { [weak self] _ in self?.handleOnAppear() }
-			.store(in: &cancellables)
-		
-		sharedAction
-			.filter { if case .selectPlanet = $0 { return true } else { return false } }
-			.sink { [weak self] action in
-				if case let .selectPlanet(planet) = action {
-					self?.handleSelectPlanet(planet)
-				}
+	public func dispatch(_ action: SWAction) {
+		Task { @MainActor in
+			switch action {
+			case .onAppear, .didTapPill(0):
+				handleOnAppear()
+			case .refresh:
+				handleRefresh()
+			case let .selectPlanet(planetId):
+				handleSelectPlanet(planetId)
+			case .didTapPill(1):
+				break
+			case .didTapPill:
+				fatalError("not implemented")
 			}
-			.store(in: &cancellables)
-			
-		sharedAction
-			.filter { if case .refresh = $0 { return true } else { return false } }
-			.handleEvents(receiveRequest: { [weak self] _ in
-				self?.isLoading = true
-			})
-			.sink { [weak self] _ in self?.handleRefresh() }
-			.store(in: &cancellables)
+		}
 	}
 	
 	// MARK: - Action Handlers
 	private func handleOnAppear() {
-		fetchPlanets()
+		isLoading = true
+
+		fetchPlanets(.onAppear)
 	}
 	
 	private func handleSelectPlanet(_ planetId: String) {
@@ -86,7 +71,7 @@ public final class SWViewModel: ObservableObject {
 	}
 	
 	private func handleRefresh() {
-		fetchPlanets()
+		fetchPlanets(.refresh)
 	}
 	
 	// MARK: - Methods
@@ -97,19 +82,35 @@ public final class SWViewModel: ObservableObject {
 		}
 	}
 	
-	private func fetchPlanets() {
-		inFlightTasks[.onAppear]?.cancel()
-		inFlightTasks[.onAppear] = Task {
+	private func fetchPlanets(_ action: SWAction) {
+		inFlightTasks[action]?.cancel()
+		inFlightTasks.removeValue(forKey: .onAppear)
+		
+		isLoading = action == .onAppear // show loading indicator only on .onAppear, refresh has its own progress view
+		error = nil
+		
+		let task = Task { [weak self] in
+			guard let self = self else { return }
+			
 			do {
-				self.model = try await self.service.fetchPlanets()
-				self.planetListItems = self.model.planets.map { PlanetListItem(from: $0) }
-
+				let response = try await self.service.fetchPlanets()
+				
+				if Task.isCancelled { return }
+				
+				self.model = response
 				self.error = nil
 			} catch {
-				self.error = SWError.message(error.localizedDescription)
+				if !Task.isCancelled {
+					self.error = SWError.message(error.localizedDescription)
+				}
 			}
 			
-			self.isLoading = false
+			if !Task.isCancelled {
+				self.isLoading = false
+				self.inFlightTasks.removeValue(forKey: .onAppear)
+			}
 		}
+		
+		inFlightTasks[.onAppear] = task
 	}
 }

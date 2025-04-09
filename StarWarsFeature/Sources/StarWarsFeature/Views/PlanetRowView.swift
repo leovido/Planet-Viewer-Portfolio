@@ -22,3 +22,7 @@ public struct PlanetRowView: View {
 		.cornerRadius(8)
 	}
 }
+
+#Preview(traits:  .sizeThatFitsLayout) {
+	PlanetRowView(planet: .default)
+}

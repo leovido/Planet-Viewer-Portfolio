@@ -1,6 +1,5 @@
 import SwiftUI
 import StarWarsFeature
-import Combine
 import Foundation
 
 struct MainView: View {
@@ -9,26 +8,14 @@ struct MainView: View {
 	var body: some View {
 		ZStack {
 			TabView {
-				NavigationStack {
-					VStack {
-						HeaderView(viewModel: viewModel)
-						PlanetsListView(viewModel: viewModel)
-							.navigationTitle(Text("SWPlanetViewer"))
-						
-						Spacer()
-					}
-					.background(Color.black)
-					.refreshable {
-						viewModel.action.send(.refresh)
-					}
-				}
+				PlanetsTabView(viewModel: viewModel)
 				.tabItem {
 					Label(LocalizedStringKey("Planets"), systemImage: "moon.stars")
 				}
 				.tag(0)
 			}
 			.onAppear {
-				viewModel.action.send(.onAppear)
+				viewModel.dispatch(.onAppear)
 			}
 		}
 	}
@@ -36,4 +23,5 @@ struct MainView: View {
 
 #Preview {
 	MainView()
+		.preferredColorScheme(.dark)
 }

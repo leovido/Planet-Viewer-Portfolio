@@ -88,5 +88,6 @@ public struct PlanetDetailView: View {
 #Preview {
 	NavigationStack {
 		PlanetDetailView(viewModel: SWPlanetDetailViewModel(planet: .default))
+			.preferredColorScheme(.dark)
 	}
 }

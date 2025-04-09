@@ -11,7 +11,7 @@ public struct HeaderView: View {
 		ScrollView(.horizontal) {
 			HStack(spacing: 10) {
 				Button {
-					viewModel.action.send(.didTapPill(0))
+					viewModel.dispatch(.didTapPill(0))
 				} label: {
 					Text(LocalizedStringResource(stringLiteral: "Planets"))
 						.padding(8)

@@ -37,5 +37,11 @@ public struct PlanetsListView: View {
 }
 
 #Preview {
-	PlanetsListView(viewModel: .init(service: SWService.test))
+	@ObservedObject var viewModel: SWViewModel = .init(service: SWService.test)
+	
+	PlanetsListView(viewModel: viewModel)
+		.onAppear {
+			viewModel.dispatch(.onAppear)
+		}
+		.preferredColorScheme(.dark)
 }
