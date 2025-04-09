@@ -17,8 +17,6 @@ public final class SWViewModel: ObservableObject {
 	@Published public var error: SWError?
 	@Published public var isLoading: Bool = false
 	
-	public var artificialDelay: Duration = .zero
-	
 	public var planetListItems: [PlanetListItem] {
 		model.planets.map { PlanetListItem(from: $0) }
 	}
