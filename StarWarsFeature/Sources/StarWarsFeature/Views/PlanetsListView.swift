@@ -41,7 +41,9 @@ public struct PlanetsListView: View {
 	
 	PlanetsListView(viewModel: viewModel)
 		.onAppear {
-			viewModel.dispatch(.onAppear)
+			Task {
+				await viewModel.dispatch(.onAppear)
+			}
 		}
 		.preferredColorScheme(.dark)
 }

@@ -15,7 +15,9 @@ struct MainView: View {
 				.tag(0)
 			}
 			.onAppear {
-				viewModel.dispatch(.onAppear)
+				Task {
+					await viewModel.dispatch(.onAppear)
+				}
 			}
 		}
 	}

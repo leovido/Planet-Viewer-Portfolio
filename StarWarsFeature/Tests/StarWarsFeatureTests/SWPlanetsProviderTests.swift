@@ -15,8 +15,8 @@ final class SWPlanetsProviderTests: XCTestCase {
 	func testFetchPlanets() async throws {
 		let planets = try await planetsService.fetchPlanets()
 		
-		XCTAssertEqual(planets.count, 1)
-		XCTAssertEqual(planets.planets.first!.name, "Tatooine")
+		XCTAssertEqual(planets.count, 7)
+		XCTAssertEqual(planets.planets.first!.name, "Alderaan")
 	}
 	
 	func testFetchPlanetsError() async throws {
