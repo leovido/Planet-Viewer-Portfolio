@@ -25,7 +25,9 @@ public final class SWViewModel: ObservableObject {
 	private let service: SWPlanetsProvider
 	
 	deinit {
+		// Ensure all tasks are cancelled when view model is deallocated
 		inFlightTasks.forEach { $0.value.cancel() }
+		inFlightTasks.removeAll()
 	}
 	
 	public init(
@@ -40,75 +42,89 @@ public final class SWViewModel: ObservableObject {
 		self.service = service
 	}
 	
-	public func dispatch(_ action: SWAction) {
-		Task { @MainActor in
-			switch action {
-			case .onAppear, .didTapPill(0):
-				handleOnAppear()
-			case .refresh:
-				handleRefresh()
-			case let .selectPlanet(planetId):
-				handleSelectPlanet(planetId)
-			case .didTapPill(1):
-				break
-			case .didTapPill:
-				fatalError("not implemented")
-			}
+	public func dispatch(_ action: SWAction) async {
+		switch action {
+		case .onAppear, .didTapPill(0):
+			await handleOnAppear()
+		case .refresh:
+			await handleRefresh()
+		case let .selectPlanet(planetId):
+			handleSelectPlanet(planetId)
+		case .didTapPill(1):
+			break
+		case .didTapPill:
+			fatalError("not implemented")
 		}
 	}
 	
 	// MARK: - Action Handlers
-	private func handleOnAppear() {
+	private func handleOnAppear() async {
 		isLoading = true
-
-		fetchPlanets(.onAppear)
+		await fetchPlanets(.onAppear)
 	}
 	
 	private func handleSelectPlanet(_ planetId: String) {
 		selectPlanet(withId: planetId)
 	}
 	
-	private func handleRefresh() {
-		fetchPlanets(.refresh)
+	private func handleRefresh() async {
+		await fetchPlanets(.refresh)
 	}
 	
-	// MARK: - Methods
-	
-	func selectPlanet(withId id: String) {
+	private func selectPlanet(withId id: String) {
 		if let planet = model.planets.first(where: { $0.id == id }) {
 			selectedPlanetDetail = PlanetDetail(from: planet)
 		}
 	}
 	
-	private func fetchPlanets(_ action: SWAction) {
-		inFlightTasks[action]?.cancel()
-		inFlightTasks.removeValue(forKey: .onAppear)
-		
-		isLoading = action == .onAppear // show loading indicator only on .onAppear, refresh has its own progress view
-		error = nil
+	private func fetchPlanets(_ action: SWAction) async {
+		await withTask(for: action, showLoading: action == .onAppear) {
+			let response = try await self.service.fetchPlanets()
+			self.model = response
+		}
+	}
+}
+
+extension SWViewModel {
+	private func withTask(
+		for action: SWAction,
+		showLoading: Bool = false,
+		operation: @escaping () async throws -> Void
+	) async {
+		if let existingTask = inFlightTasks[action] {
+			existingTask.cancel()
+			inFlightTasks.removeValue(forKey: action)
+		}
 		
 		let task = Task { [weak self] in
 			guard let self = self else { return }
 			
 			do {
-				let response = try await self.service.fetchPlanets()
-				
-				if Task.isCancelled { return }
-				
-				self.model = response
-				self.error = nil
-			} catch {
-				if !Task.isCancelled {
-					self.error = SWError.message(error.localizedDescription)
+				if showLoading {
+					self.isLoading = true
 				}
-			}
-			
-			if !Task.isCancelled {
+				
+				try await operation()
+				
+				guard !Task.isCancelled else {
+					return
+				}
+				
 				self.isLoading = false
-				self.inFlightTasks.removeValue(forKey: .onAppear)
+				
+			} catch {
+				guard !Task.isCancelled else {
+					return
+				}
+				
+				self.error = SWError.message(error.localizedDescription)
+				self.isLoading = false
 			}
 		}
 		
-		inFlightTasks[.onAppear] = task
+		inFlightTasks[action] = task
+		// Wait for task completion and then remove from dictionary
+		await task.value
+		inFlightTasks.removeValue(forKey: action)
 	}
 }

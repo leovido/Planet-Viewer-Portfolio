@@ -15,7 +15,7 @@ struct PlanetsTabView: View {
 			}
 			.background(Color.black)
 			.refreshable {
-				viewModel.dispatch(.refresh)
+				await viewModel.dispatch(.refresh)
 			}
 		}
 	}
@@ -27,7 +27,9 @@ struct PlanetsTabView: View {
 	PlanetsTabView(viewModel: viewModel)
 		.navigationTitle(Text("SWPlanetViewer"))
 		.onAppear {
-			viewModel.dispatch(.onAppear)
+			Task {
+				await viewModel.dispatch(.onAppear)
+			}
 		}
 		.preferredColorScheme(.dark)
 }
