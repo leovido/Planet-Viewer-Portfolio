@@ -4,5 +4,6 @@ public enum Constants {
 
 public enum Endpoint: String {
 	case planets
+	case films
 	case people
 }

@@ -10,6 +10,7 @@ public final class SWService: SWPlanetsProvider {
 			delegateQueue: nil
 		),
 		fetchPlanets: @escaping () async throws -> SWPlanetsResponse,
+		fetchFilms: @escaping () async throws -> SWFilmResponse,
 		fetchPeople: @escaping () async throws -> SWPeopleResponse
 	) {
 		session.configuration.urlCache = URLCache()
@@ -17,12 +18,13 @@ public final class SWService: SWPlanetsProvider {
 		
 		self.session = session
 		self.fetchPlanets = fetchPlanets
+		self.fetchFilms = fetchFilms
 		self.fetchPeople = fetchPeople
 	}
 	
 	public var fetchPlanets: () async throws -> SWPlanetsResponse = { fatalError("Not implemented") }
+	public var fetchFilms: () async throws -> SWFilmResponse = { fatalError("Not implemented") }
 	public var fetchPeople: () async throws -> SWPeopleResponse = { fatalError("Not implemented") }
-	
 }
 
 extension SWService {
@@ -142,6 +144,11 @@ extension SWService {
 					)
 				]
 			)
+		},
+		fetchFilms: {
+			SWFilmResponse(count: 9, next: "", previous: nil, results: [
+				.init(title: "Title", episodeId: 0)
+			])
 		},
 		fetchPeople: {
 			SWPeopleResponse(
