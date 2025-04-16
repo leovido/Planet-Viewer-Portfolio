@@ -1,7 +1,7 @@
 import SwiftUI
 import Foundation
 
-extension SWViewModel {
+extension SWPlanetViewModel {
 	public enum SWAction: Hashable {
 		case onAppear
 		case refresh
@@ -11,7 +11,7 @@ extension SWViewModel {
 }
 
 @MainActor
-public final class SWViewModel: ObservableObject {
+public final class SWPlanetViewModel: ObservableObject {
 	@Published public var model: SWPlanetsResponse = .noop
 	@Published public var selectedPlanetDetail: PlanetDetail?
 	@Published public var error: SWError?
@@ -85,7 +85,7 @@ public final class SWViewModel: ObservableObject {
 	}
 }
 
-extension SWViewModel {
+extension SWPlanetViewModel {
 	private func withTask(
 		for action: SWAction,
 		showLoading: Bool = false,
