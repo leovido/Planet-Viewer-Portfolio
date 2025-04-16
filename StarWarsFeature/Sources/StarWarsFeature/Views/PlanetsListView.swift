@@ -1,31 +1,20 @@
 import SwiftUI
 
 public struct PlanetsListView: View {
-	@ObservedObject private var viewModel: SWViewModel
+	@ObservedObject private var coordinator: SWCoordinator
 	
-	public init(viewModel: SWViewModel) {
-		self.viewModel = viewModel
+	public init(coordinator: SWCoordinator) {
+		self.coordinator = coordinator
 	}
 	
 	public var body: some View {
 		Group {
 			ScrollView {
-				ForEach(viewModel.planetListItems) { planet in
-					NavigationLink(
-						destination: PlanetDetailView(
-							viewModel: SWPlanetDetailViewModel(
-								planet: viewModel.model.planets
-									.first(where: { $0.id == planet.id }) ?? SWPlanet.default)
-						)
-					) {
-						PlanetCard(planet: planet)
-					}
-					.padding(.vertical, 4)
-				}
+				SomeView()
 			}
 		}
 		.overlay(content: {
-			if viewModel.isLoading {
+			if coordinator.planetViewModel.isLoading {
 				VStack {
 					Spacer()
 					ProgressView()
@@ -34,15 +23,47 @@ public struct PlanetsListView: View {
 			}
 		})
 	}
+	
+	@ViewBuilder
+	func SomeView() -> some View {
+		switch coordinator.selectedPill {
+		case .planets:
+			ForEach(coordinator.planetViewModel.planetListItems) { planet in
+				NavigationLink(
+					destination: PlanetDetailView(
+						viewModel: SWPlanetDetailViewModel(
+							planet: coordinator.planetViewModel.model.planets
+								.first(where: { $0.id == planet.id }) ?? SWPlanet.default)
+					)
+				) {
+					CardView(model: planet)
+				}
+				.padding(.vertical, 4)
+			}
+		case .people:
+			ForEach(coordinator.peopleViewModel.peopleListItems) { person in
+				NavigationLink(
+					destination: PersonDetailView(
+						viewModel: SWPersonDetailViewModel(
+							person: coordinator.peopleViewModel.model.results
+								.first(where: { $0.id == person.id })!)
+					)
+				) {
+					CardView(model: person)
+				}
+				.padding(.vertical, 4)
+			}
+		}
+	}
 }
 
 #Preview {
-	@ObservedObject var viewModel: SWViewModel = .init(service: SWService.test)
+	@ObservedObject var coordinator: SWCoordinator = .init(planetViewModel: .init(service: SWService.test), peopleViewModel: .init())
 	
-	PlanetsListView(viewModel: viewModel)
+	PlanetsListView(coordinator: coordinator)
 		.onAppear {
 			Task {
-				await viewModel.dispatch(.onAppear)
+				await coordinator.planetViewModel.dispatch(.onAppear)
 			}
 		}
 		.preferredColorScheme(.dark)

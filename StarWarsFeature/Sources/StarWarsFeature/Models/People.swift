@@ -7,7 +7,8 @@ public struct SWPeopleResponse: Codable, Sendable {
 	public let results: [SWPeople]
 }
 
-public struct SWPeople: Codable, Sendable {
+public struct SWPeople: Identifiable, Codable, Sendable {
+	public let id: String = UUID().uuidString
 	public let name, height, mass, hairColor: String
 	public let skinColor, eyeColor, birthYear, gender: String
 	public let homeworld: String
@@ -29,6 +30,53 @@ public struct SWPeople: Codable, Sendable {
 	}
 }
 
+public struct PersonListItem: Identifiable {
+	public let id: String
+	public let name: String
+	public let homeworld: String
+	
+	public init(from person: SWPeople) {
+		self.id = person.id
+		self.name = person.name
+		self.homeworld = person.homeworld
+	}
+}
+
+extension PersonListItem: CardDisplayable {
+	var title: String {
+		return name
+	}
+	
+	var description: String {
+		return homeworld
+	}
+	
+	var caption: String {
+		return ""
+	}
+}
+
+public struct PersonDetailModel: Identifiable {
+	public let id: String
+	public let name: String
+	public let hometown: String
+	public let species: [String]
+	public let films: [String]
+	public let vehicles: [String]
+	public let starships: [String]
+	
+	public init(from person: SWPeople) {
+		self.id = person.id
+		self.name = person.name
+		self.hometown = person.homeworld
+		self.species = person.species
+		self.films = person.films
+		self.vehicles = person.vehicles
+		self.starships = person.starships
+	}
+}
+
+
 extension SWPeopleResponse {
 	public static let noop: SWPeopleResponse = .init(
 		count: 0,
@@ -37,3 +85,4 @@ extension SWPeopleResponse {
 		results: []
 	)
 }
+

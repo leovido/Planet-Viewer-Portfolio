@@ -1,0 +1,131 @@
+import SwiftUI
+import Foundation
+
+extension SWPeopleViewModel {
+	public enum SWAction: Hashable {
+		case onAppear
+		case refresh
+		case selectPerson(String)
+		case didTapPill(Int)
+	}
+}
+
+@MainActor
+public final class SWPeopleViewModel: ObservableObject {
+	@Published public var model: SWPeopleResponse = .noop
+	@Published public var selectedPersonDetail: PersonDetailModel?
+	@Published public var error: SWError?
+	@Published public var isLoading: Bool = false
+	
+	public var peopleListItems: [PersonListItem] {
+		model.results.map { PersonListItem(from: $0) }
+	}
+	
+	private var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
+	private let service: SWPlanetsProvider
+	
+	deinit {
+		inFlightTasks.forEach { $0.value.cancel() }
+		inFlightTasks.removeAll()
+	}
+	
+	public init(
+		model: SWPeopleResponse = .noop,
+		error: SWError? = nil,
+		isLoading: Bool = false,
+		service: SWPlanetsProvider = SWService.live
+	) {
+		self.model = model
+		self.error = error
+		self.isLoading = isLoading
+		self.service = service
+	}
+	
+	public func dispatch(_ action: SWAction) async {
+		switch action {
+		case .onAppear, .didTapPill(0):
+			await handleOnAppear()
+		case .refresh:
+			await handleRefresh()
+		case let .selectPerson(personId):
+			handleSelectPerson(personId)
+		case .didTapPill(1):
+			break
+		case .didTapPill:
+			fatalError("not implemented")
+		}
+	}
+	
+	// MARK: - Action Handlers
+	private func handleOnAppear() async {
+		isLoading = true
+		await fetchPeople(.onAppear)
+	}
+	
+	private func handleSelectPerson(_ personId: String) {
+		selectPerson(withId: personId)
+	}
+	
+	private func handleRefresh() async {
+		await fetchPeople(.refresh)
+	}
+	
+	private func selectPerson(withId id: String) {
+		if let person = model.results.first(where: { $0.id == id }) {
+			selectedPersonDetail = PersonDetailModel(from: person)
+		}
+	}
+	
+	private func fetchPeople(_ action: SWAction) async {
+		await withTask(for: action, showLoading: action == .onAppear) {
+			let response = try await self.service.fetchPeople()
+			self.model = response
+		}
+	}
+}
+
+extension SWPeopleViewModel {
+	private func withTask(
+		for action: SWAction,
+		showLoading: Bool = false,
+		operation: @escaping () async throws -> Void
+	) async {
+		error = nil
+
+		if let existingTask = inFlightTasks[action] {
+			existingTask.cancel()
+			inFlightTasks.removeValue(forKey: action)
+		}
+		
+		let task = Task { [weak self] in
+			guard let self = self else { return }
+			
+			do {
+				if showLoading {
+					self.isLoading = true
+				}
+				
+				try await operation()
+				
+				guard !Task.isCancelled else {
+					return
+				}
+				
+				self.isLoading = false
+				
+			} catch {
+				guard !Task.isCancelled else {
+					return
+				}
+				
+				self.error = SWError.message(error.localizedDescription)
+				self.isLoading = false
+			}
+		}
+		
+		inFlightTasks[action] = task
+		// Wait for task completion and then remove from dictionary
+		await task.value
+		inFlightTasks.removeValue(forKey: action)
+	}
+}

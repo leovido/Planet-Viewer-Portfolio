@@ -3,7 +3,7 @@ import XCTest
 
 @MainActor
 final class SWViewModelTests: XCTestCase {
-	var viewModel: SWViewModel!
+	var viewModel: SWPlanetViewModel!
 	
 	override func setUp() async throws {
 		viewModel = .init(service: SWService.test)
@@ -56,7 +56,7 @@ final class SWViewModelTests: XCTestCase {
 	}
 	
 	func testServiceError() async throws {
-		viewModel = SWViewModel(service: SWService(fetchPlanets: {
+		viewModel = SWPlanetViewModel(service: SWService(fetchPlanets: {
 			throw SWError.message("Server error")
 		}, fetchPeople: {
 			fatalError()

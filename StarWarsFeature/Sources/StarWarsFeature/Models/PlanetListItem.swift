@@ -14,6 +14,20 @@ public struct PlanetListItem: Identifiable {
 	}
 }
 
+extension PlanetListItem: CardDisplayable {
+	var title: String {
+		return name
+	}
+	
+	var description: String {
+		return climate
+	}
+	
+	var caption: String {
+		return population
+	}
+}
+
 public struct PlanetDetail: Identifiable {
 	public let id: String
 	public let name: String

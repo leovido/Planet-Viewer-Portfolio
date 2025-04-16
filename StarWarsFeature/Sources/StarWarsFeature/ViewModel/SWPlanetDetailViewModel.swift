@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 public final class SWPlanetDetailViewModel: ObservableObject {
 	private let planet: SWPlanet
 	

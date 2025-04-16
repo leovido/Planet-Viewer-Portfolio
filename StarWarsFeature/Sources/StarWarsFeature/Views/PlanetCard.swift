@@ -1,27 +1,37 @@
 import SwiftUI
 
-struct PlanetCard: View {
-	let planet: PlanetListItem
+protocol CardDisplayable {
+	var title: String { get }
+	var description: String { get }
+	var caption: String { get }
+}
+
+struct CardView<T: CardDisplayable>: View {
+	let model: T
 	
 	var body: some View {
 		VStack(alignment: .leading, spacing: 8) {
-			Text(planet.name)
+			Text(model.title)
 				.font(.system(size: 24, weight: .bold, design: .rounded))
 				.foregroundStyle(Color.white)
 			
-			Text(planet.climate.uppercased())
+			Text(model.description.uppercased())
 				.font(.system(size: 12, weight: .black))
 				.foregroundStyle(Color.white)
 				.tracking(1.5)
 				.padding(4)
 
-			HStack(spacing: 4) {
-				Image(systemName: "person.3.fill")
-					.font(.system(size: 10))
-				
-				Text("POP: \(planet.population)")
-					.font(.system(size: 14, weight: .medium))
-					.foregroundStyle(Color.white.opacity(0.7))
+			if !model.caption.isEmpty {
+				HStack(spacing: 4) {
+					Image(systemName: "person.3.fill")
+						.font(.system(size: 10))
+					
+					Text("POP: \(model.caption)")
+						.font(.system(size: 14, weight: .medium))
+						.foregroundStyle(Color.white.opacity(0.7))
+				}
+			} else {
+				EmptyView()
 			}
 		}
 		.frame(maxWidth: .infinity, alignment: .leading)
@@ -45,7 +55,7 @@ struct PlanetCard: View {
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-	PlanetCard(planet: .init(from: .default))
+	CardView(model: PlanetListItem(from: SWPlanet.default))
 		.padding()
 		.preferredColorScheme(.dark)
 }
