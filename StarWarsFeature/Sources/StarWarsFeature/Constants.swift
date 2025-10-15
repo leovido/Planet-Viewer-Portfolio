@@ -1,5 +1,5 @@
 public enum Constants {
-	static let baseURL = "https://swapi.dev/api"
+	static let baseURL = "https://www.swapi.tech/api"
 }
 
 public enum Endpoint: String {
