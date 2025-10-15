@@ -18,7 +18,7 @@ public final class SWPlanetViewModel: ObservableObject {
 	@Published public var isLoading: Bool = false
 	
 	public var planetListItems: [PlanetListItem] {
-		model.planets.map { PlanetListItem(from: $0) }
+		model.planets.map { PlanetListItem(from: $0.properties) }
 	}
 	
 	private var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
@@ -72,13 +72,13 @@ public final class SWPlanetViewModel: ObservableObject {
 	}
 	
 	private func selectPlanet(withId id: String) {
-		if let planet = model.planets.first(where: { $0.id == id }) {
-			selectedPlanetDetail = PlanetDetail(from: planet)
+		if let planet = model.planets.first(where: { $0.uid == id }) {
+			selectedPlanetDetail = PlanetDetail(from: planet.properties)
 		}
 	}
 	
 	private func fetchPlanets(_ action: SWAction) async {
-		await withTask(for: action, showLoading: action == .onAppear) {
+		await withTask(for: action, showLoading: action == .onAppear || action == .refresh) {
 			let response = try await self.service.fetchPlanets()
 			self.model = response
 		}
@@ -91,6 +91,8 @@ extension SWPlanetViewModel {
 		showLoading: Bool = false,
 		operation: @escaping () async throws -> Void
 	) async {
+		error = nil
+		
 		if let existingTask = inFlightTasks[action] {
 			existingTask.cancel()
 			inFlightTasks.removeValue(forKey: action)
@@ -128,3 +130,4 @@ extension SWPlanetViewModel {
 		inFlightTasks.removeValue(forKey: action)
 	}
 }
+

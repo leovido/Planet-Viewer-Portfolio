@@ -4,7 +4,7 @@ public struct PersonDetailView: View {
 	@ObservedObject var viewModel: SWPersonDetailViewModel
 	@State private var showingMoreInfo = true
 	
-	init(viewModel: SWPersonDetailViewModel, showingMoreInfo: Bool = true) {
+	public init(viewModel: SWPersonDetailViewModel, showingMoreInfo: Bool = true) {
 		self.viewModel = viewModel
 		self.showingMoreInfo = showingMoreInfo
 	}

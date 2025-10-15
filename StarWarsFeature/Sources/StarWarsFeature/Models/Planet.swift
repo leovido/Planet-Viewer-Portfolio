@@ -1,14 +1,30 @@
 import Foundation
 
 public struct SWPlanetsResponse: Codable, Hashable, Sendable {
-	public let count: Int
+	public let totalRecords: Int
 	public let next: String?
 	public let previous: String?
-	public let planets: [SWPlanet]
+	public let planets: [NewSWPlanet]
 	
 	enum CodingKeys: String, CodingKey {
-		case count, next, previous
+		case totalRecords = "total_records"
+		case next, previous
 		case planets = "results"
+	}
+}
+
+public struct NewSWPlanet: Codable, Hashable, Sendable {
+	public let properties: SWPlanet
+	public let id: String
+	let description: String
+	public let uid: String
+	let v: Int
+	
+	enum CodingKeys: String, CodingKey {
+		case properties
+		case id = "_id"
+		case description, uid
+		case v = "__v"
 	}
 }
 
@@ -18,11 +34,10 @@ public struct SWPlanet: Identifiable, Codable, Hashable, Sendable {
 	public let name, rotationPeriod, orbitalPeriod, diameter: String
 	public let climate, gravity, terrain, surfaceWater: String
 	public let population: String
-	public let residents, films: [String]
 	public let created, edited: String
 	public let url: String
 	
-	public init(name: String, rotationPeriod: String, orbitalPeriod: String, diameter: String, climate: String, gravity: String, terrain: String, surfaceWater: String, population: String, residents: [String], films: [String], created: String, edited: String, url: String) {
+	public init(name: String, rotationPeriod: String, orbitalPeriod: String, diameter: String, climate: String, gravity: String, terrain: String, surfaceWater: String, population: String, created: String, edited: String, url: String) {
 		self.name = name
 		self.rotationPeriod = rotationPeriod
 		self.orbitalPeriod = orbitalPeriod
@@ -32,8 +47,6 @@ public struct SWPlanet: Identifiable, Codable, Hashable, Sendable {
 		self.terrain = terrain
 		self.surfaceWater = surfaceWater
 		self.population = population
-		self.residents = residents
-		self.films = films
 		self.created = created
 		self.edited = edited
 		self.url = url
@@ -61,8 +74,6 @@ public struct SWPlanet: Identifiable, Codable, Hashable, Sendable {
 		let rawPopulation = try container.decode(String.self, forKey: .population)
 		let decimalPopulation = Decimal(string: rawPopulation) ?? 0
 		self.population = decimalPopulation.formatted(.number).description
-		self.residents = try container.decode([String].self, forKey: .residents)
-		self.films = try container.decode([String].self, forKey: .films)
 		self.created = try container.decode(String.self, forKey: .created)
 		self.edited = try container.decode(String.self, forKey: .edited)
 		self.url = try container.decode(String.self, forKey: .url)
@@ -74,7 +85,7 @@ public struct SWPlanet: Identifiable, Codable, Hashable, Sendable {
 		case orbitalPeriod = "orbital_period"
 		case diameter, climate, gravity, terrain
 		case surfaceWater = "surface_water"
-		case population, residents, films, created, edited, url
+		case population, created, edited, url
 	}
 }
 
@@ -89,8 +100,6 @@ extension SWPlanet {
 		terrain: "grassy hills, swamps, forests, mountains",
 		surfaceWater: "12",
 		population: "4500000000",
-		residents: [],
-		films: [],
 		created: "2014-12-09T13:50:49.644Z",
 		edited: "2014-12-10T13:59:28.459Z",
 		url: "https://swapi.dev/api/planets/8/"
@@ -99,6 +108,6 @@ extension SWPlanet {
 
 extension SWPlanetsResponse {
 	public static var noop: SWPlanetsResponse {
-		.init(count: 0, next: "", previous: nil, planets: [])
+		.init(totalRecords: 0, next: "", previous: nil, planets: [])
 	}
 }

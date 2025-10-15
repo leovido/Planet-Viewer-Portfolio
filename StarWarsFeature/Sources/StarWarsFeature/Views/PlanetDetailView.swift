@@ -4,7 +4,7 @@ public struct PlanetDetailView: View {
 	@ObservedObject var viewModel: SWPlanetDetailViewModel
 	@State private var showingMoreInfo = true
 	
-	init(viewModel: SWPlanetDetailViewModel, showingMoreInfo: Bool = true) {
+	public init(viewModel: SWPlanetDetailViewModel, showingMoreInfo: Bool = true) {
 		self.viewModel = viewModel
 		self.showingMoreInfo = showingMoreInfo
 	}
