@@ -46,7 +46,7 @@ jobs:
 
       - name: Run StarWarsFeatureTests
         run: |
-          xcodebuild test-without-building \
+          xcodebuild test \
                      -workspace SWPlanetViewer.xcworkspace \
                      -scheme StarWarsFeature \
                      -configuration Debug \
