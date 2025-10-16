@@ -83,9 +83,16 @@ extension SWService {
 			)
 		},
 		fetchFilms: {
-			SWFilmResponse(count: 9, next: "", previous: nil, results: [
-				.init(title: "Title", episodeId: 0)
-			])
+			.init(message: "ok",
+				  totalRecords: 10,
+				  totalPages: 1,
+				  next: nil,
+				  previous: nil,
+				  apiVersion: nil,
+				  timestamp: nil,
+				  results: [
+					.init(title: "A New Hope", director: "George Lucas", releaseDate: "1977-05-25")
+				  ])
 		},
 		fetchPeople: {
 			SWPeopleResponse(
