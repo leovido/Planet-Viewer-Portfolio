@@ -3,19 +3,12 @@ import StarWarsFeature
 import Foundation
 
 struct MainView: View {
-	@StateObject private var coordinator: SWCoordinator = .init(
-		planetViewModel: .init(),
-		peopleViewModel: .init()
-	)
 	@StateObject private var filmViewModel: SWFilmViewModel = .init()
 	
 	var body: some View {
 		ZStack {
 			TabView {
-				PlanetsTabView(coordinator: coordinator)
-					.task {
-						await coordinator.planetViewModel.dispatch(.onAppear)
-					}
+				PlanetsTabView()
 					.tabItem {
 						Label(LocalizedStringKey("Planets"), systemImage: "moon.stars")
 					}

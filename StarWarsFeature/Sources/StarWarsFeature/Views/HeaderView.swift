@@ -1,20 +1,26 @@
 import SwiftUI
 
 public struct HeaderView: View {
-	@ObservedObject var coordinator: SWCoordinator
+	@Binding var selectedPill: PillSelection
+	let onPlanetsTapped: () -> Void
+	let onPeopleTapped: () -> Void
 
-	public init(coordinator: SWCoordinator) {
-		self.coordinator = coordinator
+	public init(
+		selectedPill: Binding<PillSelection>,
+		onPlanetsTapped: @escaping () -> Void,
+		onPeopleTapped: @escaping () -> Void
+	) {
+		self._selectedPill = selectedPill
+		self.onPlanetsTapped = onPlanetsTapped
+		self.onPeopleTapped = onPeopleTapped
 	}
 	
 	public var body: some View {
 		ScrollView(.horizontal) {
 			HStack(spacing: 10) {
 				Button {
-					coordinator.selectedPill = .planets
-					Task {
-						await coordinator.planetViewModel.dispatch(.didTapPill(0))
-					}
+					selectedPill = .planets
+					onPlanetsTapped()
 				} label: {
 					Text(LocalizedStringResource(stringLiteral: "Planets"))
 						.padding(8)
@@ -25,10 +31,8 @@ public struct HeaderView: View {
 				}
 				
 				Button {
-					coordinator.selectedPill = .people
-					Task {
-						await coordinator.peopleViewModel.dispatch(.didTapPill(1))
-					}
+					selectedPill = .people
+					onPeopleTapped()
 				} label: {
 					Text(LocalizedStringResource(stringLiteral: "People"))
 						.padding(8)

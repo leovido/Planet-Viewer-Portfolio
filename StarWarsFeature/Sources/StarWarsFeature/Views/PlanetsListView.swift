@@ -1,12 +1,18 @@
 import SwiftUI
 
 public struct PlanetsListView: View {
-	@ObservedObject private var coordinator: SWCoordinator
-	@ObservedObject private var planetViewModel: SWPlanetViewModel
+	let selectedPill: PillSelection
+	@ObservedObject var planetViewModel: SWPlanetViewModel
+	@ObservedObject var peopleViewModel: SWPeopleViewModel
 	
-	public init(coordinator: SWCoordinator) {
-		self.coordinator = coordinator
-		self.planetViewModel = coordinator.planetViewModel
+	public init(
+		selectedPill: PillSelection,
+		planetViewModel: SWPlanetViewModel,
+		peopleViewModel: SWPeopleViewModel
+	) {
+		self.selectedPill = selectedPill
+		self.planetViewModel = planetViewModel
+		self.peopleViewModel = peopleViewModel
 	}
 	
 	public var body: some View {
@@ -30,7 +36,7 @@ public struct PlanetsListView: View {
 	
 	@ViewBuilder
 	func SomeView() -> some View {
-		switch coordinator.selectedPill {
+		switch selectedPill {
 		case .planets:
 			ForEach(planetViewModel.planetListItems) { planet in
 				NavigationLink(
@@ -46,11 +52,11 @@ public struct PlanetsListView: View {
 				.padding(.vertical, 4)
 			}
 		case .people:
-			ForEach(coordinator.peopleViewModel.peopleListItems) { person in
+			ForEach(peopleViewModel.peopleListItems) { person in
 				NavigationLink(
 					destination: PersonDetailView(
 						viewModel: SWPersonDetailViewModel(
-							person: coordinator.peopleViewModel.model.results
+							person: peopleViewModel.model.results
 								.first(where: { $0.id == person.id })!)
 					)
 				) {
@@ -63,14 +69,13 @@ public struct PlanetsListView: View {
 }
 
 #Preview {
-	@ObservedObject var coordinator: SWCoordinator = .init(
-		planetViewModel: .init(service: SWService.test),
-		peopleViewModel: .init()
+	PlanetsListView(
+		selectedPill: .planets,
+		planetViewModel: SWPlanetViewModel(service: SWService.test),
+		peopleViewModel: SWPeopleViewModel()
 	)
-	
-	PlanetsListView(coordinator: coordinator)
 		.task {
-			await coordinator.planetViewModel.dispatch(.onAppear)
+			await SWPlanetViewModel(service: SWService.test).dispatch(.onAppear)
 		}
 		.preferredColorScheme(.dark)
 }

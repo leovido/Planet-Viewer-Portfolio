@@ -2,28 +2,44 @@ import SwiftUI
 import StarWarsFeature
 
 struct PlanetsTabView: View {
-	@ObservedObject var coordinator: SWCoordinator
+	@State private var selectedPill: PillSelection = .planets
+	@StateObject private var planetViewModel = SWPlanetViewModel()
+	@StateObject private var peopleViewModel = SWPeopleViewModel()
 
 	var body: some View {
 		NavigationStack {
 			VStack {
-				HeaderView(coordinator: coordinator)
-				PlanetsListView(coordinator: coordinator)
+				HeaderView(
+					selectedPill: $selectedPill,
+					onPlanetsTapped: {
+						selectedPill = .planets
+						Task {
+							await planetViewModel.dispatch(.didTapPill(0))
+						}
+					},
+					onPeopleTapped: {
+						selectedPill = .people
+						Task {
+							await peopleViewModel.dispatch(.didTapPill(1))
+						}
+					}
+				)
+				PlanetsListView(selectedPill: selectedPill, planetViewModel: planetViewModel, peopleViewModel: peopleViewModel)
 					.navigationTitle(Text("SWPlanetViewer"))
 					
 				Spacer()
 			}
 			.overlay(alignment: .top) {
-				switch coordinator.selectedPill {
+				switch selectedPill {
 				case .planets:
-					if let error = coordinator.planetViewModel.error {
+					if let error = planetViewModel.error {
 						ContentUnavailableView(
 							"Planet error",
 							systemImage: "moon",
 							description: Text("An error occured: \(error.localizedDescription)"))
 					}
 				case .people:
-					if let error = coordinator.peopleViewModel.error {
+					if let error = peopleViewModel.error {
 						ContentUnavailableView(
 							"Person error",
 							systemImage: "person",
@@ -32,16 +48,16 @@ struct PlanetsTabView: View {
 				}
 			}
 			.refreshable {
-				switch coordinator.selectedPill {
+				switch selectedPill {
 				case .planets:
-					await coordinator.planetViewModel.dispatch(.refresh)
+					await planetViewModel.dispatch(.refresh)
 				case .people:
-					await coordinator.peopleViewModel.dispatch(.refresh)
+					await peopleViewModel.dispatch(.refresh)
 				}
 			}
 			.onAppear {
 				Task {
-					await coordinator.planetViewModel.dispatch(.onAppear)
+					await planetViewModel.dispatch(.onAppear)
 				}
 			}
 		}
@@ -49,31 +65,7 @@ struct PlanetsTabView: View {
 }
 
 #Preview {
-	@ObservedObject var coordinator: SWCoordinator = .init(
-		planetViewModel: .init(),
-		peopleViewModel: .init()
-	)
-	
-	PlanetsTabView(coordinator: coordinator)
-		.navigationTitle(Text("SWPlanetViewer"))
-		.onAppear {
-			Task {
-				await coordinator.planetViewModel.dispatch(.onAppear)
-			}
-		}
-		.preferredColorScheme(.dark)
-}
-
-#Preview {
-	@ObservedObject var coordinator: SWCoordinator = .init(
-		planetViewModel: .init(
-			error: SWError.message("Planet error"),
-		 service: SWService.test
-	 ),
-		peopleViewModel: .init()
-	)
-	
-	PlanetsTabView(coordinator: coordinator)
+	PlanetsTabView()
 		.navigationTitle(Text("SWPlanetViewer"))
 		.preferredColorScheme(.dark)
 }
