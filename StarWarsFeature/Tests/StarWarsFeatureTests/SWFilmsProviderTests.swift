@@ -15,8 +15,8 @@ final class SWFilmProviderTests: XCTestCase {
 	func testFetchFilms() async throws {
 		let response = try await planetsService.fetchFilms()
 		
-		XCTAssertEqual(response.results.count, 1)
-		XCTAssertEqual(response.results.first!.title, "A New Hope")
+		XCTAssertEqual(response.result.count, 1)
+		XCTAssertEqual(response.result.first!.properties.title, "Star Wars: Episode IV - A New Hope")
 	}
 	
 	func testFetchFilmsError() async throws {
