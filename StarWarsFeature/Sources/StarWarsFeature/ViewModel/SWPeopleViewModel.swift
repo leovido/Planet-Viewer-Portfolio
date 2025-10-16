@@ -12,7 +12,7 @@ extension SWPeopleViewModel {
 }
 
 @MainActor
-public final class SWPeopleViewModel: ObservableObject {
+public final class SWPeopleViewModel: SWViewModelProtocol, ObservableObject {
 	@Published public var model: SWPeopleResponse = .noop
 	@Published public var selectedPersonDetail: PersonDetailModel?
 	@Published public var error: SWError?
@@ -20,7 +20,7 @@ public final class SWPeopleViewModel: ObservableObject {
 	
 	@Published public var peopleListItems: [PersonListItem] = []
 	
-	private var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
+	var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
 	private let service: SWAPIProvider
 	
 	private(set) var cancellables: Set<AnyCancellable> = []
@@ -93,8 +93,23 @@ public final class SWPeopleViewModel: ObservableObject {
 	}
 }
 
-extension SWPeopleViewModel {
-	private func withTask(
+@MainActor
+protocol SWViewModelProtocol: AnyObject {
+	associatedtype SWAction: Hashable
+	
+	var isLoading: Bool { get set }
+	var error: SWError? { get set }
+	var inFlightTasks: [SWAction: Task<Void, Never>] { get set }
+	
+	func withTask(
+		for action: SWAction,
+		showLoading: Bool,
+		operation: @escaping () async throws -> Void
+	) async
+}
+
+extension SWViewModelProtocol {
+	func withTask(
 		for action: SWAction,
 		showLoading: Bool = false,
 		operation: @escaping () async throws -> Void

@@ -1,14 +1,6 @@
 import SwiftUI
 
-public protocol CardDisplayable {
-	associatedtype Model
-	
-	var title: String { get }
-	var description: String { get }
-	var caption: String { get }
-}
-
-public struct PlanetCardView<T: CardDisplayable>: View where T.Model == PlanetListItem {
+public struct FilmCardView<T: CardDisplayable>: View where T.Model == FilmListItem {
 	let model: T
 	
 	public var body: some View {
@@ -24,13 +16,13 @@ public struct PlanetCardView<T: CardDisplayable>: View where T.Model == PlanetLi
 				.tracking(1.5)
 				.padding(4)
 				.background(Color.black)
-
+			
 			if !model.caption.isEmpty {
 				HStack(spacing: 4) {
-					Image(systemName: "person.3.fill")
+					Image(systemName: "film.fill")
 						.font(.system(size: 10))
 					
-					Text("POP: \(model.caption)")
+					Text("\(model.caption)")
 						.font(.system(size: 14, weight: .medium))
 						.foregroundStyle(Color.white.opacity(0.7))
 				}
@@ -59,7 +51,7 @@ public struct PlanetCardView<T: CardDisplayable>: View where T.Model == PlanetLi
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-	PlanetCardView(model: PlanetListItem(from: SWPlanet.default))
+	FilmCardView(model: FilmListItem(from: NewSWFilm(properties: .default, id: "", description: "", uid: "", v: 1)))
 		.padding()
 		.preferredColorScheme(.dark)
 }

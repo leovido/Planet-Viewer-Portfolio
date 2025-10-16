@@ -162,54 +162,6 @@ extension SWPeople {
 	)
 }
 
-public struct PersonListItem: Identifiable {
-	public let id: String
-	public let name: String
-	public let numberOfFilms: Int
-	public let hairColor: String
-
-	public init(from person: SWPeople) {
-		self.id = UUID().uuidString
-		self.name = person.name
-		self.numberOfFilms = person.films.count
-		self.hairColor = person.hairColor
-	}
-}
-
-extension PersonListItem: CardDisplayable {
-	typealias Model = Self
-	
-	var title: String {
-		return name
-	}
-	
-	var description: String {
-		return "# of films: \(numberOfFilms.description)"
-	}
-	
-	var caption: String {
-		return hairColor
-	}
-}
-
-public struct PersonDetailModel: Identifiable {
-	public let id: String
-	public let name: String
-	public let hometown: String
-	public let films: [String]
-	public let vehicles: [String]
-	public let starships: [String]
-	
-	public init(from person: SWPeople) {
-		self.id = UUID().uuidString
-		self.name = person.name
-		self.hometown = person.homeworld
-		self.films = person.films
-		self.vehicles = person.vehicles
-		self.starships = person.starships
-	}
-}
-
 extension SWPeopleResponse {
 	public static let noop: SWPeopleResponse = .init(
 		message: nil,

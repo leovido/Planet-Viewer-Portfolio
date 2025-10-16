@@ -84,14 +84,12 @@ extension SWService {
 		},
 		fetchFilms: {
 			.init(message: "ok",
-				  totalRecords: 10,
-				  totalPages: 1,
-				  next: nil,
-				  previous: nil,
-				  apiVersion: nil,
-				  timestamp: nil,
-				  results: [
-					.init(title: "A New Hope", director: "George Lucas", releaseDate: "1977-05-25")
+				  result: [
+					.init(properties: .default,
+						  id: UUID().uuidString,
+						  description: "",
+						  uid: "",
+						  v: 1)
 				  ])
 		},
 		fetchPeople: {

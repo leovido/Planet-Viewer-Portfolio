@@ -1,15 +1,23 @@
 import SwiftUI
 
 public struct FilmView: View {
-	@ObservedObject var viewModel: SWFilmViewModel
+	@StateObject var viewModel: SWFilmViewModel
 	
 	public init(viewModel: SWFilmViewModel) {
-		self.viewModel = viewModel
+		self._viewModel = StateObject(wrappedValue: viewModel)
 	}
 	
 	public var body: some View {
-		List(viewModel.film.results) { film in
-			Text(film.title)
+		ScrollView {
+			LazyVStack(spacing: 0) {
+				ForEach(viewModel.filmListItems) { film in
+					FilmCardView(model: film)
+						.padding(.vertical, 4)
+				}
+			}
+		}
+		.task {
+			await viewModel.dispatch(.onAppear)
 		}
 		.navigationTitle(Text("Films"))
 		.overlay {
@@ -34,8 +42,7 @@ public struct FilmView: View {
 
 #Preview {
 	let viewModel: SWFilmViewModel = .init(
-		service: SWService.test,
-		error: SWError.message("Error")
+		error: SWError.message("Error"), service: SWService.test
 	)
 	NavigationStack {
 		FilmView(viewModel: viewModel)
@@ -51,8 +58,7 @@ public struct FilmView: View {
 
 #Preview {
 	let viewModel: SWFilmViewModel = .init(
-		service: SWService.test,
-		error: SWError.message("Error")
+		error: SWError.message("Error"), service: SWService.test
 	)
 	NavigationStack {
 		FilmView(viewModel: viewModel)

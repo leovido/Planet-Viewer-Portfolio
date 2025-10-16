@@ -2,42 +2,42 @@ import Foundation
 
 public struct SWFilmResponse: Codable, Hashable, Sendable {
 	public let message: String?
-	public let totalRecords: Int
-	public let totalPages: Int?
-	public let next: String?
-	public let previous: String?
-	public let apiVersion: String?
-	public let timestamp: String?
-	public let results: [SWFilm]
+	public let result: [NewSWFilm]
 	
 	public init(
 		message: String?,
-		totalRecords: Int,
-		totalPages: Int?,
-		next: String?,
-		previous: String?,
-		apiVersion: String?,
-		timestamp: String?,
-		results: [SWFilm]
+		result: [NewSWFilm]
 	) {
 		self.message = message
-		self.totalRecords = totalRecords
-		self.totalPages = totalPages
-		self.next = next
-		self.previous = previous
-		self.apiVersion = apiVersion
-		self.timestamp = timestamp
-		self.results = results
+		self.result = result
 	}
 	
 	enum CodingKeys: String, CodingKey {
 		case message
-		case totalRecords = "total_records"
-		case totalPages = "total_pages"
-		case next, previous
-		case apiVersion
-		case timestamp
-		case results
+		case result
+	}
+}
+
+public struct NewSWFilm: Codable, Hashable, Sendable {
+	public let properties: SWFilm
+	public let id: String
+	public let description: String
+	public let uid: String
+	public let v: Int
+	
+	public init(properties: SWFilm, id: String, description: String, uid: String, v: Int) {
+		self.properties = properties
+		self.id = id
+		self.description = description
+		self.uid = uid
+		self.v = v
+	}
+	
+	enum CodingKeys: String, CodingKey {
+		case id = "_id"
+		case properties
+		case description, uid
+		case v = "__v"
 	}
 }
 
@@ -46,7 +46,7 @@ public struct SWFilm: Identifiable, Hashable, Codable, Sendable {
 	public let title: String
 	public let director: String
 	public let releaseDate: String
-
+	
 	enum CodingKeys: String, CodingKey {
 		case title
 		case director
@@ -54,15 +54,17 @@ public struct SWFilm: Identifiable, Hashable, Codable, Sendable {
 	}
 }
 
+extension SWFilm {
+	public static var `default`: SWFilm {
+		.init(title: "Star Wars: Episode IV - A New Hope",
+			  director: "George Lucas",
+			  releaseDate: "1977-05-25")
+	}
+}
+
 extension SWFilmResponse {
 	public static var noop: SWFilmResponse {
 		.init(message: nil,
-			  totalRecords: 0,
-			  totalPages: nil,
-			  next: nil,
-			  previous: nil,
-			  apiVersion: nil,
-			  timestamp: nil,
-			  results: [])
+			  result: [])
 	}
 }

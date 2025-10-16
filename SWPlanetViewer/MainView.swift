@@ -3,8 +3,6 @@ import StarWarsFeature
 import Foundation
 
 struct MainView: View {
-	@StateObject private var filmViewModel: SWFilmViewModel = .init()
-	
 	var body: some View {
 		ZStack {
 			TabView {
@@ -15,14 +13,7 @@ struct MainView: View {
 					.tag(0)
 				
 				NavigationStack {
-					FilmView(viewModel: filmViewModel)
-						.task {
-							do {
-								try await filmViewModel.fetchFilms()
-							} catch {
-								dump(error)
-							}
-						}
+					FilmView(viewModel: .init())
 				}
 				.tabItem {
 					Label(LocalizedStringKey("Films"), systemImage: "film")

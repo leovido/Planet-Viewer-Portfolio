@@ -1,35 +1,58 @@
 import SwiftUI
 
+extension SWFilmViewModel {
+	public enum SWAction: Hashable {
+		case onAppear
+	}
+}
+
 @MainActor
-public final class SWFilmViewModel: ObservableObject {
-	@Published public var film: SWFilmResponse = .noop
-	
+public final class SWFilmViewModel: ObservableObject, SWViewModelProtocol {
+	@Published public var selectedPersonDetail: PersonDetailModel?
+	@Published public var filmListItems: [FilmListItem] = []
+
 	@Published public var isLoading: Bool = false
-	@Published public var error: Error?
+	@Published public var error: SWError?
 	
+	var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
 	private let service: SWAPIProvider
 	
+	deinit {
+		inFlightTasks.forEach { $0.value.cancel() }
+		inFlightTasks.removeAll()
+	}
+	
 	public init(
-		service: SWAPIProvider = SWService.live,
-		film: SWFilmResponse = .noop,
 		isLoading: Bool = false,
-		error: Error? = nil
+		error: SWError? = nil,
+		service: SWAPIProvider = SWService.live
 	) {
 		self.service = service
-		self.film = film
 		self.isLoading = isLoading
 		self.error = error
 	}
 	
-	public func fetchFilms() async throws {
-		isLoading = true
-		error = nil
-		do {
-			film = try await service.fetchFilms()
-		} catch {
-			self.error = error
+	public func dispatch(_ action: SWAction) async {
+		switch action {
+		case .onAppear:
+			do {
+				try await handleOnAppear()
+			} catch {
+				dump(error)
+			}
 		}
-		
-		isLoading = false
+	}
+	
+	public func handleOnAppear() async throws {
+		try await fetchFilms()
+	}
+	
+	public func fetchFilms() async throws {
+		do {
+			let response = try await service.fetchFilms()
+			self.filmListItems = response.result.map({ FilmListItem(from: $0) })
+		} catch {
+			self.error = .message(error.localizedDescription)
+		}
 	}
 }
