@@ -3,7 +3,7 @@
 ![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg)
 ![Platform](https://img.shields.io/badge/Platform-iOS%2017.0-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
-
+[![codecov](https://codecov.io/gh/leovido/Planet-Viewer-Portfolio/graph/badge.svg?token=1K0T5BFDQB)](https://codecov.io/gh/leovido/Planet-Viewer-Portfolio)
 
 A SwiftUI application that allows users to browse planets from the Star Wars universe. 
 
