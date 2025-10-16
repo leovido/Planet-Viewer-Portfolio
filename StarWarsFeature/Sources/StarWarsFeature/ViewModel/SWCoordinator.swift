@@ -7,8 +7,8 @@ public enum PillSelection {
 
 @MainActor
 public final class SWCoordinator: ObservableObject {
-	public let planetViewModel: SWPlanetViewModel
-	public let peopleViewModel: SWPeopleViewModel
+	@Published public var planetViewModel: SWPlanetViewModel
+	@Published public var peopleViewModel: SWPeopleViewModel
 	
 	@Published public var selectedTab: Int = 0
 	@Published public var selectedPill: PillSelection = .planets

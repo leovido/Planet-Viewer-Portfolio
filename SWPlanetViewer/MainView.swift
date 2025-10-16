@@ -13,6 +13,9 @@ struct MainView: View {
 		ZStack {
 			TabView {
 				PlanetsTabView(coordinator: coordinator)
+					.task {
+						await coordinator.planetViewModel.dispatch(.onAppear)
+					}
 					.tabItem {
 						Label(LocalizedStringKey("Planets"), systemImage: "moon.stars")
 					}
@@ -32,9 +35,6 @@ struct MainView: View {
 					Label(LocalizedStringKey("Films"), systemImage: "film")
 				}
 				.tag(1)
-			}
-			.task {
-				await coordinator.planetViewModel.dispatch(.onAppear)
 			}
 		}
 	}

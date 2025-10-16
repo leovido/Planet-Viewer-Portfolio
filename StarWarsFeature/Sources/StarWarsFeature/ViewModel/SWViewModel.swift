@@ -40,13 +40,11 @@ public final class SWPlanetViewModel: ObservableObject {
 		self.error = error
 		self.isLoading = isLoading
 		self.service = service
-		
-		// Initialize planetListItems with the initial model
 		self.planetListItems = model.planets.map { PlanetListItem(from: $0) }
 		
 		$model
-			.sink { _ in
-				self.planetListItems = self.model.planets.map { PlanetListItem(from: $0) }
+			.sink { newModel in
+				self.planetListItems = newModel.planets.map { PlanetListItem(from: $0) }
 			}
 			.store(in: &cancellables)
 	}
@@ -68,7 +66,6 @@ public final class SWPlanetViewModel: ObservableObject {
 	
 	// MARK: - Action Handlers
 	private func handleOnAppear() async {
-		isLoading = true
 		await fetchPlanets(.onAppear)
 	}
 	

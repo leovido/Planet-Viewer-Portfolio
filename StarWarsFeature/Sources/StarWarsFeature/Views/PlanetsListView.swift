@@ -2,9 +2,11 @@ import SwiftUI
 
 public struct PlanetsListView: View {
 	@ObservedObject private var coordinator: SWCoordinator
+	@ObservedObject private var planetViewModel: SWPlanetViewModel
 	
 	public init(coordinator: SWCoordinator) {
 		self.coordinator = coordinator
+		self.planetViewModel = coordinator.planetViewModel
 	}
 	
 	public var body: some View {
@@ -16,7 +18,7 @@ public struct PlanetsListView: View {
 			}
 		}
 		.overlay(content: {
-			if coordinator.planetViewModel.isLoading {
+			if planetViewModel.isLoading {
 				VStack {
 					Spacer()
 					ProgressView()
@@ -30,11 +32,11 @@ public struct PlanetsListView: View {
 	func SomeView() -> some View {
 		switch coordinator.selectedPill {
 		case .planets:
-			ForEach(coordinator.planetViewModel.planetListItems) { planet in
+			ForEach(planetViewModel.planetListItems) { planet in
 				NavigationLink(
 					destination: PlanetDetailView(
 						viewModel: SWPlanetDetailViewModel(
-							planet: coordinator.planetViewModel.model.planets
+							planet: planetViewModel.model.planets
 								.first(where: { $0.id == planet.id }) ?? .default
 						)
 					)
