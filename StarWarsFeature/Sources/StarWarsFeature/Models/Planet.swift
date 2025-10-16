@@ -38,14 +38,27 @@ public struct NewSWPlanet: Codable, Hashable, Sendable {
 
 public struct SWPlanet: Identifiable, Codable, Hashable, Sendable {
 	public let id: String = UUID().uuidString
-
+	
 	public let name, rotationPeriod, orbitalPeriod, diameter: String
 	public let climate, gravity, terrain, surfaceWater: String
 	public let population: String
 	public let created, edited: String
 	public let url: String
 	
-	public init(name: String, rotationPeriod: String, orbitalPeriod: String, diameter: String, climate: String, gravity: String, terrain: String, surfaceWater: String, population: String, created: String, edited: String, url: String) {
+	public init(
+		name: String,
+		rotationPeriod: String,
+		orbitalPeriod: String,
+		diameter: String,
+		climate: String,
+		gravity: String,
+		terrain: String,
+		surfaceWater: String,
+		population: String,
+		created: String,
+		edited: String,
+		url: String
+	) {
 		self.name = name
 		self.rotationPeriod = rotationPeriod
 		self.orbitalPeriod = orbitalPeriod

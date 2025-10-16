@@ -6,13 +6,15 @@ public final class SWFilmViewModel: ObservableObject {
 	
 	@Published public var isLoading: Bool = false
 	@Published public var error: Error?
-
+	
 	private let service: SWAPIProvider
 	
-	public init(service: SWAPIProvider = SWService.live,
-							film: SWFilmResponse = .noop,
-							isLoading: Bool = false,
-							error: Error? = nil) {
+	public init(
+		service: SWAPIProvider = SWService.live,
+		film: SWFilmResponse = .noop,
+		isLoading: Bool = false,
+		error: Error? = nil
+	) {
 		self.service = service
 		self.film = film
 		self.isLoading = isLoading

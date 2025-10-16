@@ -10,7 +10,16 @@ public struct SWPeopleResponse: Codable, Hashable, Sendable {
 	public let timestamp: String?
 	public let results: [NewSWPeople]
 	
-	public init(message: String?, totalRecords: Int, totalPages: Int?, next: String?, previous: String?, apiVersion: String?, timestamp: String?, results: [NewSWPeople]) {
+	public init(
+		message: String?,
+		totalRecords: Int,
+		totalPages: Int?,
+		next: String?,
+		previous: String?,
+		apiVersion: String?,
+		timestamp: String?,
+		results: [NewSWPeople]
+	) {
 		self.message = message
 		self.totalRecords = totalRecords
 		self.totalPages = totalPages
