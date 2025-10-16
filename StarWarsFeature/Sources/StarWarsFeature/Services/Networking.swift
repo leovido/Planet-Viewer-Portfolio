@@ -23,6 +23,6 @@ final class Networking {
 			throw SWError.invalidResponse
 		}
 		
-		return try! SWJSONDecoder.decoder.decode(T.self, from: data)
+		return try SWJSONDecoder.decoder.decode(T.self, from: data)
 	}
 }

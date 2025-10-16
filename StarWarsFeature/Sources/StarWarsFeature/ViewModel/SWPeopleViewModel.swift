@@ -21,7 +21,7 @@ public final class SWPeopleViewModel: ObservableObject {
 	@Published public var peopleListItems: [PersonListItem] = []
 	
 	private var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
-	private let service: SWPlanetsProvider
+	private let service: SWAPIProvider
 	
 	private(set) var cancellables: Set<AnyCancellable> = []
 	
@@ -34,7 +34,7 @@ public final class SWPeopleViewModel: ObservableObject {
 		model: SWPeopleResponse = .noop,
 		error: SWError? = nil,
 		isLoading: Bool = false,
-		service: SWPlanetsProvider = SWService.live
+		service: SWAPIProvider = SWService.live
 	) {
 		self.model = model
 		self.error = error

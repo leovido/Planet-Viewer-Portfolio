@@ -10,6 +10,17 @@ public struct SWPeopleResponse: Codable, Hashable, Sendable {
 	public let timestamp: String?
 	public let results: [NewSWPeople]
 	
+	public init(message: String?, totalRecords: Int, totalPages: Int?, next: String?, previous: String?, apiVersion: String?, timestamp: String?, results: [NewSWPeople]) {
+		self.message = message
+		self.totalRecords = totalRecords
+		self.totalPages = totalPages
+		self.next = next
+		self.previous = previous
+		self.apiVersion = apiVersion
+		self.timestamp = timestamp
+		self.results = results
+	}
+	
 	enum CodingKeys: String, CodingKey {
 		case message
 		case totalRecords = "total_records"
@@ -36,9 +47,17 @@ public struct SWPeopleResult: Codable, Hashable, Sendable {
 public struct NewSWPeople: Codable, Hashable, Sendable {
 	public let properties: SWPeople
 	public let id: String
-	let description: String
+	public let description: String
 	public let uid: String
-	let v: Int
+	public let v: Int
+	
+	public init(properties: SWPeople, id: String, description: String, uid: String, v: Int) {
+		self.properties = properties
+		self.id = id
+		self.description = description
+		self.uid = uid
+		self.v = v
+	}
 	
 	enum CodingKeys: String, CodingKey {
 		case properties
@@ -95,74 +114,47 @@ public struct SWPeople: Identifiable, Hashable, Codable, Sendable {
 	}
 	
 	enum CodingKeys: String, CodingKey {
+		case id
 		case name, height, mass
 		case hairColor = "hair_color"
 		case skinColor = "skin_color"
 		case eyeColor = "eye_color"
 		case birthYear = "birth_year"
 		case gender, homeworld, films
-		case species, vehicles, starships
+		case vehicles, starships
 		case created, edited, url
-	}
-	
-	public init(from decoder: Decoder) throws {
-		let container = try decoder.container(keyedBy: CodingKeys.self)
-		self.id = UUID().uuidString
-		self.name = try container.decode(String.self, forKey: .name)
-		self.height = try container.decode(String.self, forKey: .height)
-		self.mass = try container.decode(String.self, forKey: .mass)
-		self.hairColor = try container.decode(String.self, forKey: .hairColor)
-		self.skinColor = try container.decode(String.self, forKey: .skinColor)
-		self.eyeColor = try container.decode(String.self, forKey: .eyeColor)
-		self.birthYear = try container.decode(String.self, forKey: .birthYear)
-		self.gender = try container.decode(String.self, forKey: .gender)
-		self.homeworld = try container.decode(String.self, forKey: .homeworld)
-		self.films = try container.decode([String].self, forKey: .films)
-		self.vehicles = try container.decode([String].self, forKey: .vehicles)
-		self.starships = try container.decode([String].self, forKey: .starships)
-		self.created = try container.decode(String.self, forKey: .created)
-		self.edited = try container.decode(String.self, forKey: .edited)
-		self.url = try container.decode(String.self, forKey: .url)
-	}
-	
-	public func encode(to encoder: Encoder) throws {
-		var container = encoder.container(keyedBy: CodingKeys.self)
-		try container.encode(name, forKey: .name)
-		try container.encode(height, forKey: .height)
-		try container.encode(mass, forKey: .mass)
-		try container.encode(hairColor, forKey: .hairColor)
-		try container.encode(skinColor, forKey: .skinColor)
-		try container.encode(eyeColor, forKey: .eyeColor)
-		try container.encode(birthYear, forKey: .birthYear)
-		try container.encode(gender, forKey: .gender)
-		try container.encode(homeworld, forKey: .homeworld)
-		try container.encode(films, forKey: .films)
-		try container.encode(vehicles, forKey: .vehicles)
-		try container.encode(starships, forKey: .starships)
-		try container.encode(created, forKey: .created)
-		try container.encode(edited, forKey: .edited)
-		try container.encode(url, forKey: .url)
 	}
 }
 
 extension SWPeople {
-	static let `default`: SWPeople = .init(
+	public static let `default`: SWPeople = .init(
 		id: "1",
-		name: "https://swapi.dev/api/planets/1/",
+		name: "Luke Skywalker",
 		height: "172",
-		mass: "4323",
-		hairColor: "blonde",
-		skinColor: "green",
-		eyeColor: "Luke Skywalker",
+		mass: "77",
+		hairColor: "blond",
+		skinColor: "fair",
+		eyeColor: "blue",
 		birthYear: "19BBY",
-		gender: "blue",
-		homeworld: "male",
-		films: [],
-		vehicles: [],
-		starships: [],
-		created: "",
-		edited: "",
-		url: ""
+		gender: "male",
+		homeworld: "https://swapi.dev/api/planets/1/",
+		films: [
+			"https://swapi.dev/api/films/1/",
+			"https://swapi.dev/api/films/2/",
+			"https://swapi.dev/api/films/3/",
+			"https://swapi.dev/api/films/6/"
+		],
+		vehicles: [
+			"https://swapi.dev/api/vehicles/14/",
+			"https://swapi.dev/api/vehicles/30/"
+		],
+		starships: [
+			"https://swapi.dev/api/starships/12/",
+			"https://swapi.dev/api/starships/22/"
+		],
+		created: "2014-12-09T13:50:51.644000Z",
+		edited: "2014-12-20T21:17:56.891000Z",
+		url: "https://swapi.dev/api/people/1/"
 	)
 }
 

@@ -22,10 +22,9 @@ public final class SWPlanetViewModel: ObservableObject {
 	private(set) var cancellables: Set<AnyCancellable> = []
 	
 	private var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
-	private let service: SWPlanetsProvider
+	private let service: SWAPIProvider
 	
 	deinit {
-		// Ensure all tasks are cancelled when view model is deallocated
 		inFlightTasks.forEach { $0.value.cancel() }
 		inFlightTasks.removeAll()
 	}
@@ -34,7 +33,7 @@ public final class SWPlanetViewModel: ObservableObject {
 		model: SWPlanetsResponse = .noop,
 		error: SWError? = nil,
 		isLoading: Bool = false,
-		service: SWPlanetsProvider = SWService.live
+		service: SWAPIProvider = SWService.live
 	) {
 		self.model = model
 		self.error = error
@@ -43,6 +42,7 @@ public final class SWPlanetViewModel: ObservableObject {
 		self.planetListItems = model.planets.map { PlanetListItem(from: $0) }
 		
 		$model
+			.receive(on: DispatchQueue.main)
 			.sink { newModel in
 				self.planetListItems = newModel.planets.map { PlanetListItem(from: $0) }
 			}

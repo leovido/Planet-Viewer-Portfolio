@@ -1,6 +1,6 @@
 import Foundation
 
-public final class SWService: SWPlanetsProvider {
+public final class SWService: SWAPIProvider {
 	private let session: URLSession
 	
 	public init(
@@ -96,7 +96,11 @@ extension SWService {
 				previous: nil,
 				apiVersion: "1.0",
 				timestamp: "2025-10-16T03:32:32.247Z",
-				results: []
+				results: [.init(properties: .default,
+								id: "1",
+								description: "",
+								uid: "",
+								v: 1)]
 			)
 		}
 	)

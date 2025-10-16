@@ -7,9 +7,9 @@ public final class SWFilmViewModel: ObservableObject {
 	@Published public var isLoading: Bool = false
 	@Published public var error: Error?
 
-	private let service: SWPlanetsProvider
+	private let service: SWAPIProvider
 	
-	public init(service: SWPlanetsProvider = SWService.live,
+	public init(service: SWAPIProvider = SWService.live,
 							film: SWFilmResponse = .noop,
 							isLoading: Bool = false,
 							error: Error? = nil) {

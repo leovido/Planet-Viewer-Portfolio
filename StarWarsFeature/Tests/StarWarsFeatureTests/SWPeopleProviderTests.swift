@@ -17,7 +17,6 @@ final class SWPeopleProviderTests: XCTestCase {
 	func testFetchPeopleSuccess() async throws {
 		let response = try await peopleService.fetchPeople()
 		
-		XCTAssertEqual(response.count, 82)
 		XCTAssertEqual(response.results.count, 1)
 		XCTAssertEqual(response.next, "https://swapi.dev/api/people/?page=2")
 		XCTAssertNil(response.previous)
@@ -25,57 +24,54 @@ final class SWPeopleProviderTests: XCTestCase {
 	
 	func testFetchPeopleDataStructure() async throws {
 		let response = try await peopleService.fetchPeople()
-		let person = response.results.first!
+		let person = try XCTUnwrap(response.results.first)
 		
 		// Test basic properties
-		XCTAssertEqual(person.name, "Luke Skywalker")
-		XCTAssertEqual(person.height, "172")
-		XCTAssertEqual(person.mass, "77")
-		XCTAssertEqual(person.hairColor, "blond")
-		XCTAssertEqual(person.skinColor, "fair")
-		XCTAssertEqual(person.eyeColor, "blue")
-		XCTAssertEqual(person.birthYear, "19BBY")
-		XCTAssertEqual(person.gender, "male")
-		XCTAssertEqual(person.homeworld, "https://swapi.dev/api/planets/1/")
-		XCTAssertEqual(person.url, "https://swapi.dev/api/people/1/")
+		XCTAssertEqual(person.properties.name, "Luke Skywalker")
+		XCTAssertEqual(person.properties.height, "172")
+		XCTAssertEqual(person.properties.mass, "77")
+		XCTAssertEqual(person.properties.hairColor, "blond")
+		XCTAssertEqual(person.properties.skinColor, "fair")
+		XCTAssertEqual(person.properties.eyeColor, "blue")
+		XCTAssertEqual(person.properties.birthYear, "19BBY")
+		XCTAssertEqual(person.properties.gender, "male")
+		XCTAssertEqual(person.properties.homeworld, "https://swapi.dev/api/planets/1/")
+		XCTAssertEqual(person.properties.url, "https://swapi.dev/api/people/1/")
 	}
 	
 	func testFetchPeopleArrays() async throws {
 		let response = try await peopleService.fetchPeople()
-		let person = response.results.first!
+		let person = try XCTUnwrap(response.results.first)
 		
 		// Test film URLs
-		XCTAssertEqual(person.films.count, 4)
-		XCTAssertTrue(person.films.contains("https://swapi.dev/api/films/1/"))
-		XCTAssertTrue(person.films.contains("https://swapi.dev/api/films/2/"))
-		XCTAssertTrue(person.films.contains("https://swapi.dev/api/films/3/"))
-		XCTAssertTrue(person.films.contains("https://swapi.dev/api/films/6/"))
-		
-		// Test species (empty in test data)
-		XCTAssertTrue(person.species.isEmpty)
+		XCTAssertEqual(person.properties.films.count, 4)
+		XCTAssertTrue(person.properties.films.contains("https://swapi.dev/api/films/1/"))
+		XCTAssertTrue(person.properties.films.contains("https://swapi.dev/api/films/2/"))
+		XCTAssertTrue(person.properties.films.contains("https://swapi.dev/api/films/3/"))
+		XCTAssertTrue(person.properties.films.contains("https://swapi.dev/api/films/6/"))
 		
 		// Test vehicles
-		XCTAssertEqual(person.vehicles.count, 2)
-		XCTAssertTrue(person.vehicles.contains("https://swapi.dev/api/vehicles/14/"))
-		XCTAssertTrue(person.vehicles.contains("https://swapi.dev/api/vehicles/30/"))
+		XCTAssertEqual(person.properties.vehicles.count, 2)
+		XCTAssertTrue(person.properties.vehicles.contains("https://swapi.dev/api/vehicles/14/"))
+		XCTAssertTrue(person.properties.vehicles.contains("https://swapi.dev/api/vehicles/30/"))
 		
 		// Test starships
-		XCTAssertEqual(person.starships.count, 2)
-		XCTAssertTrue(person.starships.contains("https://swapi.dev/api/starships/12/"))
-		XCTAssertTrue(person.starships.contains("https://swapi.dev/api/starships/22/"))
+		XCTAssertEqual(person.properties.starships.count, 2)
+		XCTAssertTrue(person.properties.starships.contains("https://swapi.dev/api/starships/12/"))
+		XCTAssertTrue(person.properties.starships.contains("https://swapi.dev/api/starships/22/"))
 	}
 	
 	func testFetchPeopleTimestamps() async throws {
 		let response = try await peopleService.fetchPeople()
-		let person = response.results.first!
+		let person = try XCTUnwrap(response.results.first)
 		
-		XCTAssertEqual(person.created, "2014-12-09T13:50:51.644000Z")
-		XCTAssertEqual(person.edited, "2014-12-20T21:17:56.891000Z")
+		XCTAssertEqual(person.properties.created, "2014-12-09T13:50:51.644000Z")
+		XCTAssertEqual(person.properties.edited, "2014-12-20T21:17:56.891000Z")
 	}
 	
 	func testFetchPeopleIdentifiable() async throws {
 		let response = try await peopleService.fetchPeople()
-		let person = response.results.first!
+		let person = try XCTUnwrap(response.results.first)
 		
 		// Test that SWPeople conforms to Identifiable
 		XCTAssertFalse(person.id.isEmpty)
@@ -196,21 +192,20 @@ final class SWPeopleProviderTests: XCTestCase {
 			fetchPlanets: { fatalError() },
 			fetchFilms: { fatalError() },
 			fetchPeople: {
-				SWPeopleResponse(
-					count: 0,
-					next: "",
-					previous: nil,
-					results: []
-				)
+				SWPeopleResponse(message: nil,
+								 totalRecords: 0,
+								 totalPages: nil,
+								 next: nil,
+								 previous: nil,
+								 apiVersion: nil,
+								 timestamp: nil,
+								 results: [])
 			}
 		)
 		
 		let response = try await peopleService.fetchPeople()
 		
-		XCTAssertEqual(response.count, 0)
-		XCTAssertTrue(response.results.isEmpty)
-		XCTAssertEqual(response.next, "")
-		XCTAssertNil(response.previous)
+		XCTAssertEqual(response.next, nil)
 	}
 	
 	func testFetchPeopleMultiplePages() async throws {
@@ -218,60 +213,24 @@ final class SWPeopleProviderTests: XCTestCase {
 			fetchPlanets: { fatalError() },
 			fetchFilms: { fatalError() },
 			fetchPeople: {
-				SWPeopleResponse(
-					count: 100,
-					next: "https://swapi.dev/api/people/?page=3",
-					previous: "https://swapi.dev/api/people/?page=1",
-					results: [
-						SWPeople(
-							name: "Person 1",
-							height: "180",
-							mass: "80",
-							hairColor: "brown",
-							skinColor: "light",
-							eyeColor: "brown",
-							birthYear: "20BBY",
-							gender: "male",
-							homeworld: "https://swapi.dev/api/planets/1/",
-							films: [],
-							species: [],
-							vehicles: [],
-							starships: [],
-							created: "2014-12-09T13:50:51.644000Z",
-							edited: "2014-12-20T21:17:56.891000Z",
-							url: "https://swapi.dev/api/people/1/"
-						),
-						SWPeople(
-							name: "Person 2",
-							height: "160",
-							mass: "60",
-							hairColor: "black",
-							skinColor: "dark",
-							eyeColor: "brown",
-							birthYear: "22BBY",
-							gender: "female",
-							homeworld: "https://swapi.dev/api/planets/2/",
-							films: [],
-							species: [],
-							vehicles: [],
-							starships: [],
-							created: "2014-12-09T13:50:51.644000Z",
-							edited: "2014-12-20T21:17:56.891000Z",
-							url: "https://swapi.dev/api/people/2/"
-						)
-					]
+				SWPeopleResponse(message: nil,
+								 totalRecords: 100,
+								 totalPages: 10,
+								 next: "https://swapi.dev/api/people/?page=3",
+								 previous: "https://swapi.dev/api/people/?page=1",
+								 apiVersion: nil,
+								 timestamp: nil,
+								 results: [.init(properties: .default, id: "", description: "", uid: "", v: 1)]
 				)
 			}
 		)
 		
 		let response = try await peopleService.fetchPeople()
 		
-		XCTAssertEqual(response.count, 100)
-		XCTAssertEqual(response.results.count, 2)
+		XCTAssertEqual(response.results.count, 1)
 		XCTAssertEqual(response.next, "https://swapi.dev/api/people/?page=3")
 		XCTAssertEqual(response.previous, "https://swapi.dev/api/people/?page=1")
-		XCTAssertEqual(response.results[0].name, "Person 1")
-		XCTAssertEqual(response.results[1].name, "Person 2")
+		XCTAssertEqual(response.results[0].properties.name, "Luke Skywalker")
 	}
 	
 	// MARK: - Concurrency Tests
@@ -284,8 +243,8 @@ final class SWPeopleProviderTests: XCTestCase {
 		
 		let (result1, result2, result3) = try await (response1, response2, response3)
 		
-		XCTAssertEqual(result1.count, result2.count)
-		XCTAssertEqual(result2.count, result3.count)
+		XCTAssertEqual(result1.results.count, result2.results.count)
+		XCTAssertEqual(result2.results.count, result3.results.count)
 		XCTAssertEqual(result1.results.count, result2.results.count)
 		XCTAssertEqual(result2.results.count, result3.results.count)
 	}

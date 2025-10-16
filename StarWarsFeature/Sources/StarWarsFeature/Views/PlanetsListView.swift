@@ -45,7 +45,8 @@ public struct PlanetsListView: View {
 						)
 					)
 				) {
-					CardView(model: planet)
+					PlanetCardView(model: planet)
+						.drawingGroup(opaque: true)
 				}
 				.padding(.vertical, 4)
 			}

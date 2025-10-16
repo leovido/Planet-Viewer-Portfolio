@@ -2,7 +2,7 @@ import XCTest
 import StarWarsFeature
 
 final class SWPlanetsProviderIntegrationTests: XCTestCase {
-	var planetsService: SWPlanetsProvider!
+	var planetsService: SWAPIProvider!
 	
 	override func setUpWithError() throws {
 		planetsService = SWService.live

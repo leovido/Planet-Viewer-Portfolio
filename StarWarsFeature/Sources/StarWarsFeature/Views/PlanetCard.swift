@@ -8,7 +8,7 @@ protocol CardDisplayable {
 	var caption: String { get }
 }
 
-struct CardView<T: CardDisplayable>: View where T.Model == PlanetListItem {
+struct PlanetCardView<T: CardDisplayable>: View where T.Model == PlanetListItem {
 	let model: T
 	
 	var body: some View {
@@ -16,12 +16,14 @@ struct CardView<T: CardDisplayable>: View where T.Model == PlanetListItem {
 			Text(model.title)
 				.font(.system(size: 24, weight: .bold, design: .rounded))
 				.foregroundStyle(Color.white)
+				.background(Color.black)
 			
 			Text(model.description.uppercased())
 				.font(.system(size: 12, weight: .black))
 				.foregroundStyle(Color.white)
 				.tracking(1.5)
 				.padding(4)
+				.background(Color.black)
 
 			if !model.caption.isEmpty {
 				HStack(spacing: 4) {
@@ -57,7 +59,7 @@ struct CardView<T: CardDisplayable>: View where T.Model == PlanetListItem {
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-	CardView(model: PlanetListItem(from: SWPlanet.default))
+	PlanetCardView(model: PlanetListItem(from: SWPlanet.default))
 		.padding()
 		.preferredColorScheme(.dark)
 }
