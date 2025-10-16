@@ -36,22 +36,12 @@ jobs:
         run: |
           swiftlint lint --config .swiftlint.yml
 
-      - name: Build project
+      - name: Build and test project
         run: |
-          xcodebuild -workspace SWPlanetViewer.xcworkspace \
+          xcodebuild build test -workspace SWPlanetViewer.xcworkspace \
                      -scheme StarWarsFeature \
                      -configuration Debug \
-                     -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
-                     build-for-testing
-
-      - name: Run StarWarsFeatureTests
-        run: |
-          xcodebuild test \
-                     -workspace SWPlanetViewer.xcworkspace \
-                     -scheme StarWarsFeature \
-                     -configuration Debug \
-                     -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
-                     -only-testing:StarWarsFeatureTests
+                     -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest'
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
