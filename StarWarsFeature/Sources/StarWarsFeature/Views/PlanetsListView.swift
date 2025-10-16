@@ -16,11 +16,9 @@ public struct PlanetsListView: View {
 	}
 	
 	public var body: some View {
-		Group {
-			ScrollView {
-				LazyVStack(spacing: 0) {
-					SomeView()
-				}
+		ScrollView {
+			LazyVStack(spacing: 0) {
+				contentView()
 			}
 		}
 		.overlay(content: {
@@ -35,7 +33,7 @@ public struct PlanetsListView: View {
 	}
 	
 	@ViewBuilder
-	func SomeView() -> some View {
+	func contentView() -> some View {
 		switch selectedPill {
 		case .planets:
 			ForEach(planetViewModel.planetListItems) { planet in
@@ -54,13 +52,9 @@ public struct PlanetsListView: View {
 		case .people:
 			ForEach(peopleViewModel.peopleListItems) { person in
 				NavigationLink(
-					destination: PersonDetailView(
-						viewModel: SWPersonDetailViewModel(
-							person: peopleViewModel.model.results
-								.first(where: { $0.id == person.id })!)
-					)
+					destination: PersonDetailView()
 				) {
-					CardView(model: person)
+					PersonCardView(model: person)
 				}
 				.padding(.vertical, 4)
 			}

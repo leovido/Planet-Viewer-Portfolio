@@ -22,6 +22,8 @@ public struct PlanetListItem: Identifiable {
 }
 
 extension PlanetListItem: CardDisplayable {
+	typealias Model = Self
+	
 	var title: String {
 		return name
 	}

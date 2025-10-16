@@ -20,8 +20,8 @@ final class SWPlanetsProviderIntegrationTests: XCTestCase {
 		
 		XCTAssertFalse(planets.planets.isEmpty, "Should return at least one planet")
 		
-		if let tatooine = planets.planets.first(where: { $0.name == "Tatooine" }) {
-			XCTAssertEqual(tatooine.climate, "arid")
+		if let tatooine = planets.planets.first(where: { $0.properties.name == "Tatooine" }) {
+			XCTAssertEqual(tatooine.properties.climate, "arid")
 		}
 	}
 }

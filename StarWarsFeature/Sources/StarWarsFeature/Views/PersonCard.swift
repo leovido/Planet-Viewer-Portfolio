@@ -1,14 +1,6 @@
 import SwiftUI
 
-protocol CardDisplayable {
-	associatedtype Model
-	
-	var title: String { get }
-	var description: String { get }
-	var caption: String { get }
-}
-
-struct CardView<T: CardDisplayable>: View where T.Model == PlanetListItem {
+struct PersonCardView<T: CardDisplayable>: View where T.Model == PersonListItem {
 	let model: T
 	
 	var body: some View {
@@ -25,10 +17,7 @@ struct CardView<T: CardDisplayable>: View where T.Model == PlanetListItem {
 
 			if !model.caption.isEmpty {
 				HStack(spacing: 4) {
-					Image(systemName: "person.3.fill")
-						.font(.system(size: 10))
-					
-					Text("POP: \(model.caption)")
+					Text("Hair: \(model.caption)")
 						.font(.system(size: 14, weight: .medium))
 						.foregroundStyle(Color.white.opacity(0.7))
 				}
@@ -57,7 +46,7 @@ struct CardView<T: CardDisplayable>: View where T.Model == PlanetListItem {
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-	CardView(model: PlanetListItem(from: SWPlanet.default))
+	PersonCardView(model: PersonListItem(from: SWPeople.default))
 		.padding()
 		.preferredColorScheme(.dark)
 }

@@ -14,16 +14,16 @@ final class SWViewModelTests: XCTestCase {
 	}
 	
 	func testOnAppear() async throws {
-		XCTAssertEqual(viewModel.model.count, 0)
+		XCTAssertEqual(viewModel.model.planets.count, 0)
 		XCTAssertEqual(viewModel.isLoading, false)
 		await viewModel.dispatch(.onAppear)
-		XCTAssertEqual(viewModel.model.count, 7)
+		XCTAssertEqual(viewModel.model.planets.count, 2)
 	}
 	
 	func testPlanetListItems() async throws {
 		await viewModel.dispatch(.onAppear)
 
-		XCTAssertEqual(viewModel.planetListItems.count, 6)
+		XCTAssertEqual(viewModel.planetListItems.count, 2)
 	}
 	
 	func testPlanetListItemsShouldBeEmptyBeforeOnAppear() async throws {
@@ -34,14 +34,14 @@ final class SWViewModelTests: XCTestCase {
 	func testRefreshList() async throws {
 		await viewModel.dispatch(.refresh)
 		
-		XCTAssertEqual(viewModel.planetListItems.count, 6)
+		XCTAssertEqual(viewModel.planetListItems.count, 2)
 	}
 	
 	func testRefreshListDuplicate() async throws {
 		await viewModel.dispatch(.refresh)
 		await viewModel.dispatch(.refresh)
 
-		XCTAssertEqual(viewModel.planetListItems.count, 6)
+		XCTAssertEqual(viewModel.planetListItems.count, 2)
 	}
 
 	func testSelectPlanet() async throws {
@@ -58,6 +58,8 @@ final class SWViewModelTests: XCTestCase {
 	func testServiceError() async throws {
 		viewModel = SWPlanetViewModel(service: SWService(fetchPlanets: {
 			throw SWError.message("Server error")
+		}, fetchFilms: {
+			fatalError()
 		}, fetchPeople: {
 			fatalError()
 		}))

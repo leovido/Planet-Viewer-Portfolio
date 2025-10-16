@@ -1,13 +1,8 @@
 import SwiftUI
 
 public struct PersonDetailView: View {
-	@ObservedObject var viewModel: SWPersonDetailViewModel
+	@StateObject var viewModel: SWPersonDetailViewModel = .init()
 	@State private var showingMoreInfo = true
-	
-	public init(viewModel: SWPersonDetailViewModel, showingMoreInfo: Bool = true) {
-		self.viewModel = viewModel
-		self.showingMoreInfo = showingMoreInfo
-	}
 	
 	public var body: some View {
 		ScrollView {

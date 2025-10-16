@@ -2,7 +2,7 @@ import SwiftUI
 
 @MainActor
 public final class SWPersonDetailViewModel: ObservableObject {
-	private let person: SWPeople
+	@Published public var person: SWPeople?
 	
 	@Published public var name: String = ""
 	@Published public var height: String = ""
@@ -13,11 +13,6 @@ public final class SWPersonDetailViewModel: ObservableObject {
 	
 	public enum DetailAction: Equatable {
 		case loadPerson(String)
-	}
-	
-	public init(person: SWPeople) {
-		self.person = person
-		self.updateDetailState(with: person)
 	}
 	
 	private func updateDetailState(with person: SWPeople) {

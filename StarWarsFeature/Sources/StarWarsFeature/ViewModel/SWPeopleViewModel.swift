@@ -1,3 +1,4 @@
+import Combine
 import SwiftUI
 import Foundation
 
@@ -17,12 +18,12 @@ public final class SWPeopleViewModel: ObservableObject {
 	@Published public var error: SWError?
 	@Published public var isLoading: Bool = false
 	
-	public var peopleListItems: [PersonListItem] {
-		model.results.map { PersonListItem(from: $0) }
-	}
+	@Published public var peopleListItems: [PersonListItem] = []
 	
 	private var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
 	private let service: SWPlanetsProvider
+	
+	private(set) var cancellables: Set<AnyCancellable> = []
 	
 	deinit {
 		inFlightTasks.forEach { $0.value.cancel() }
@@ -39,6 +40,14 @@ public final class SWPeopleViewModel: ObservableObject {
 		self.error = error
 		self.isLoading = isLoading
 		self.service = service
+		self.peopleListItems = model.results.map({ PersonListItem(from: $0.properties) })
+		
+		$model
+			.receive(on: DispatchQueue.main)
+			.sink { newModel in
+				self.peopleListItems = newModel.results.map({ PersonListItem(from: $0.properties) })
+			}
+			.store(in: &cancellables)
 	}
 	
 	public func dispatch(_ action: SWAction) async {
@@ -50,7 +59,7 @@ public final class SWPeopleViewModel: ObservableObject {
 		case let .selectPerson(personId):
 			handleSelectPerson(personId)
 		case .didTapPill(1):
-			break
+			await fetchPeople(.didTapPill(1))
 		case .didTapPill:
 			fatalError("not implemented")
 		}
@@ -72,7 +81,7 @@ public final class SWPeopleViewModel: ObservableObject {
 	
 	private func selectPerson(withId id: String) {
 		if let person = model.results.first(where: { $0.id == id }) {
-			selectedPersonDetail = PersonDetailModel(from: person)
+			selectedPersonDetail = PersonDetailModel(from: person.properties)
 		}
 	}
 	

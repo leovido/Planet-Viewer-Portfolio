@@ -13,14 +13,16 @@ final class SWPlanetsProviderTests: XCTestCase {
 	}
 	
 	func testFetchPlanets() async throws {
-		let planets = try await planetsService.fetchPlanets()
+		let response = try await planetsService.fetchPlanets()
 		
-		XCTAssertEqual(planets.count, 7)
-		XCTAssertEqual(planets.planets.first!.name, "Alderaan")
+		XCTAssertEqual(response.planets.count, 2)
+		XCTAssertEqual(response.planets.first!.properties.name, "Alderaan")
 	}
 	
 	func testFetchPlanetsError() async throws {
 		planetsService = SWService(fetchPlanets: {
+			throw SWError.invalidResponse
+		}, fetchFilms: {
 			throw SWError.invalidResponse
 		}, fetchPeople: {
 			throw SWError.invalidResponse
@@ -38,6 +40,8 @@ final class SWPlanetsProviderTests: XCTestCase {
 	func testFetchPlanetsErrorInvalidURL() async throws {
 		planetsService = SWService(fetchPlanets: {
 			throw SWError.invalidURL
+		}, fetchFilms: {
+			throw SWError.invalidURL
 		}, fetchPeople: {
 			throw SWError.invalidURL
 		})
@@ -53,6 +57,8 @@ final class SWPlanetsProviderTests: XCTestCase {
 	
 	func testFetchPlanetsCustomError() async throws {
 		planetsService = SWService(fetchPlanets: {
+			throw SWError.message("Custom message from backend")
+		}, fetchFilms: {
 			throw SWError.message("Custom message from backend")
 		}, fetchPeople: {
 			throw SWError.message("Custom message from backend")

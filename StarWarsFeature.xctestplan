@@ -1,0 +1,33 @@
+{
+  "configurations" : [
+    {
+      "id" : "4E907773-0F22-4AD2-A532-2987C5DA2A73",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:",
+          "identifier" : "StarWarsFeature",
+          "name" : "StarWarsFeature"
+        }
+      ]
+    },
+    "testExecutionOrdering" : "random"
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "StarWarsFeatureTests",
+        "name" : "StarWarsFeatureTests"
+      }
+    }
+  ],
+  "version" : 1
+}
