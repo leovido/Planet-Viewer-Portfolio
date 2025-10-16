@@ -23,6 +23,6 @@ public struct PlanetRowView: View {
 	}
 }
 
-#Preview(traits:  .sizeThatFitsLayout) {
+#Preview(traits: .sizeThatFitsLayout) {
 	PlanetRowView(planet: .default)
 }

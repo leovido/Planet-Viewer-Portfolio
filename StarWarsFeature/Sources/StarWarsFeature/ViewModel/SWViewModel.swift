@@ -136,4 +136,3 @@ extension SWPlanetViewModel {
 		inFlightTasks.removeValue(forKey: action)
 	}
 }
-
