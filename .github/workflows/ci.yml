@@ -39,7 +39,7 @@ jobs:
       - name: Build and test project
         run: |
           xcodebuild build test -workspace SWPlanetViewer.xcworkspace \
-                     -scheme StarWarsFeature \
+                     -scheme StarWarsFeatureTests \
                      -configuration Debug \
                      -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest'
 
