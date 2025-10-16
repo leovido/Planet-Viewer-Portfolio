@@ -48,7 +48,7 @@ jobs:
         run: |
           xcodebuild test \
                      -workspace SWPlanetViewer.xcworkspace \
-                     -scheme SWPlanetViewer \
+                     -scheme StarWarsFeature \
                      -configuration Debug \
                      -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
                      -only-testing:StarWarsFeatureTests
