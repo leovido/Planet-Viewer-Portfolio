@@ -69,15 +69,14 @@ public struct NewSWPeople: Codable, Hashable, Sendable {
 	}
 	
 	enum CodingKeys: String, CodingKey {
-		case properties
 		case id = "_id"
+		case properties
 		case description, uid
 		case v = "__v"
 	}
 }
 
-public struct SWPeople: Identifiable, Hashable, Codable, Sendable {
-	public let id: String
+public struct SWPeople: Hashable, Codable, Sendable {
 	public let name, height, mass, hairColor: String
 	public let skinColor, eyeColor, birthYear, gender: String
 	public let homeworld: String
@@ -87,7 +86,6 @@ public struct SWPeople: Identifiable, Hashable, Codable, Sendable {
 	public let url: String
 	
 	public init(
-		id: String = UUID().uuidString,
 		name: String,
 		height: String,
 		mass: String,
@@ -104,7 +102,6 @@ public struct SWPeople: Identifiable, Hashable, Codable, Sendable {
 		edited: String,
 		url: String
 	) {
-		self.id = id
 		self.name = name
 		self.height = height
 		self.mass = mass
@@ -123,7 +120,6 @@ public struct SWPeople: Identifiable, Hashable, Codable, Sendable {
 	}
 	
 	enum CodingKeys: String, CodingKey {
-		case id
 		case name, height, mass
 		case hairColor = "hair_color"
 		case skinColor = "skin_color"
@@ -137,7 +133,6 @@ public struct SWPeople: Identifiable, Hashable, Codable, Sendable {
 
 extension SWPeople {
 	public static let `default`: SWPeople = .init(
-		id: "1",
 		name: "Luke Skywalker",
 		height: "172",
 		mass: "77",
@@ -174,7 +169,7 @@ public struct PersonListItem: Identifiable {
 	public let hairColor: String
 
 	public init(from person: SWPeople) {
-		self.id = person.id
+		self.id = UUID().uuidString
 		self.name = person.name
 		self.numberOfFilms = person.films.count
 		self.hairColor = person.hairColor
@@ -206,7 +201,7 @@ public struct PersonDetailModel: Identifiable {
 	public let starships: [String]
 	
 	public init(from person: SWPeople) {
-		self.id = person.id
+		self.id = UUID().uuidString
 		self.name = person.name
 		self.hometown = person.homeworld
 		self.films = person.films
