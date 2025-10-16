@@ -50,7 +50,7 @@ jobs:
                      -workspace SWPlanetViewer.xcworkspace \
                      -scheme SWPlanetViewer \
                      -configuration Debug \
-                     -destination 'platform=iOS Simulator,name=iPhone 15,OS=latest' \
+                     -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
                      -only-testing:StarWarsFeatureTests
 
       - name: Upload test results
