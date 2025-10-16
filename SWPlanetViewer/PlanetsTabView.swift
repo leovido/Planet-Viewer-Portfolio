@@ -7,10 +7,7 @@ struct PlanetsTabView: View {
 	var body: some View {
 		NavigationStack {
 			VStack {
-				HeaderView(
-					viewModel: coordinator.planetViewModel,
-					peopleViewModel: coordinator.peopleViewModel
-				)
+				HeaderView(coordinator: coordinator)
 				PlanetsListView(coordinator: coordinator)
 					.navigationTitle(Text("SWPlanetViewer"))
 					
@@ -40,6 +37,11 @@ struct PlanetsTabView: View {
 					await coordinator.planetViewModel.dispatch(.refresh)
 				case .people:
 					await coordinator.peopleViewModel.dispatch(.refresh)
+				}
+			}
+			.onAppear {
+				Task {
+					await coordinator.planetViewModel.dispatch(.onAppear)
 				}
 			}
 		}

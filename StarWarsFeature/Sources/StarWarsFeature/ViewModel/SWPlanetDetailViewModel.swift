@@ -2,7 +2,7 @@ import SwiftUI
 
 @MainActor
 public final class SWPlanetDetailViewModel: ObservableObject {
-	private let planet: SWPlanet
+	private let planet: NewSWPlanet
 	
 	@Published public var planetName: String = ""
 	@Published public var climate: String = ""
@@ -15,17 +15,17 @@ public final class SWPlanetDetailViewModel: ObservableObject {
 		case loadPlanet(String)
 	}
 	
-	public init(planet: SWPlanet) {
+	public init(planet: NewSWPlanet) {
 		self.planet = planet
 		self.updateDetailState(with: planet)
 	}
 	
-	private func updateDetailState(with planet: SWPlanet) {
-		planetName = planet.name
-		population = planet.population
-		climate = planet.climate
-		diameter = planet.diameter
-		gravity = planet.gravity
-		terrain = planet.terrain
+	private func updateDetailState(with planet: NewSWPlanet) {
+		planetName = planet.properties.name
+		climate = planet.properties.climate
+		population = planet.properties.population
+		diameter = planet.properties.diameter
+		gravity = planet.properties.gravity
+		terrain = planet.properties.terrain
 	}
 }

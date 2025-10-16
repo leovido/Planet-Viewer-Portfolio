@@ -12,6 +12,13 @@ public struct PlanetListItem: Identifiable {
 		self.climate = planet.climate
 		self.population = planet.population
 	}
+	
+	public init(from newPlanet: NewSWPlanet) {
+		self.id = newPlanet.id
+		self.name = newPlanet.properties.name
+		self.climate = newPlanet.properties.climate
+		self.population = newPlanet.properties.population
+	}
 }
 
 extension PlanetListItem: CardDisplayable {

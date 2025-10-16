@@ -10,7 +10,9 @@ public struct PlanetsListView: View {
 	public var body: some View {
 		Group {
 			ScrollView {
-				SomeView()
+				LazyVStack(spacing: 0) {
+					SomeView()
+				}
 			}
 		}
 		.overlay(content: {
@@ -33,7 +35,8 @@ public struct PlanetsListView: View {
 					destination: PlanetDetailView(
 						viewModel: SWPlanetDetailViewModel(
 							planet: coordinator.planetViewModel.model.planets
-								.first(where: { $0.id == planet.id }) ?? SWPlanet.default)
+								.first(where: { $0.id == planet.id }) ?? .default
+						)
 					)
 				) {
 					CardView(model: planet)
@@ -58,13 +61,14 @@ public struct PlanetsListView: View {
 }
 
 #Preview {
-	@ObservedObject var coordinator: SWCoordinator = .init(planetViewModel: .init(service: SWService.test), peopleViewModel: .init())
+	@ObservedObject var coordinator: SWCoordinator = .init(
+		planetViewModel: .init(service: SWService.test),
+		peopleViewModel: .init()
+	)
 	
 	PlanetsListView(coordinator: coordinator)
-		.onAppear {
-			Task {
-				await coordinator.planetViewModel.dispatch(.onAppear)
-			}
+		.task {
+			await coordinator.planetViewModel.dispatch(.onAppear)
 		}
 		.preferredColorScheme(.dark)
 }

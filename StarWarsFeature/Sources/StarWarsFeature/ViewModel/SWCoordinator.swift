@@ -17,7 +17,7 @@ public final class SWCoordinator: ObservableObject {
 		planetViewModel: SWPlanetViewModel,
 		peopleViewModel: SWPeopleViewModel
 	) {
-		self.planetViewModel = SWPlanetViewModel()
-		self.peopleViewModel = SWPeopleViewModel()
+		self.planetViewModel = planetViewModel
+		self.peopleViewModel = peopleViewModel
 	}
 }

@@ -1,15 +1,23 @@
 import Foundation
 
 public struct SWPlanetsResponse: Codable, Hashable, Sendable {
+	public let message: String?
 	public let totalRecords: Int
+	public let totalPages: Int?
 	public let next: String?
 	public let previous: String?
 	public let planets: [NewSWPlanet]
+	public let apiVersion: String?
+	public let timestamp: String?
 	
 	enum CodingKeys: String, CodingKey {
+		case message
 		case totalRecords = "total_records"
+		case totalPages = "total_pages"
 		case next, previous
 		case planets = "results"
+		case apiVersion
+		case timestamp
 	}
 }
 
@@ -89,6 +97,9 @@ public struct SWPlanet: Identifiable, Codable, Hashable, Sendable {
 	}
 }
 
+extension NewSWPlanet {
+	public static let `default` = NewSWPlanet(properties: .default, id: UUID().uuidString, description: "", uid: "", v: 1)
+}
 extension SWPlanet {
 	public static let `default` = SWPlanet(
 		name: "Naboo",
@@ -108,6 +119,15 @@ extension SWPlanet {
 
 extension SWPlanetsResponse {
 	public static var noop: SWPlanetsResponse {
-		.init(totalRecords: 0, next: "", previous: nil, planets: [])
+		.init(
+			message: nil,
+			totalRecords: 0,
+			totalPages: nil,
+			next: "",
+			previous: nil,
+			planets: [],
+			apiVersion: nil,
+			timestamp: nil
+		)
 	}
 }

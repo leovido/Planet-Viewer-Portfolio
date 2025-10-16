@@ -1,5 +1,6 @@
 import SwiftUI
 import Foundation
+import Combine
 
 extension SWPlanetViewModel {
 	public enum SWAction: Hashable {
@@ -16,10 +17,9 @@ public final class SWPlanetViewModel: ObservableObject {
 	@Published public var selectedPlanetDetail: PlanetDetail?
 	@Published public var error: SWError?
 	@Published public var isLoading: Bool = false
+	@Published public var planetListItems: [PlanetListItem] = []
 	
-	public var planetListItems: [PlanetListItem] {
-		model.planets.map { PlanetListItem(from: $0.properties) }
-	}
+	private(set) var cancellables: Set<AnyCancellable> = []
 	
 	private var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
 	private let service: SWPlanetsProvider
@@ -40,6 +40,15 @@ public final class SWPlanetViewModel: ObservableObject {
 		self.error = error
 		self.isLoading = isLoading
 		self.service = service
+		
+		// Initialize planetListItems with the initial model
+		self.planetListItems = model.planets.map { PlanetListItem(from: $0) }
+		
+		$model
+			.sink { _ in
+				self.planetListItems = self.model.planets.map { PlanetListItem(from: $0) }
+			}
+			.store(in: &cancellables)
 	}
 	
 	public func dispatch(_ action: SWAction) async {

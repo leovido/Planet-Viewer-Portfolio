@@ -31,7 +31,9 @@ extension SWService {
 	public static let test = SWService(
 		fetchPlanets: {
 			.init(
+				message: "ok",
 				totalRecords: 7,
+				totalPages: 1,
 				next: nil,
 				previous: nil,
 				planets: [
@@ -75,7 +77,9 @@ extension SWService {
 						uid: "3",
 						v: 2
 					)
-				]
+				],
+				apiVersion: "1.0",
+				timestamp: "2025-10-16T03:32:32.247Z"
 			)
 		},
 		fetchFilms: {
