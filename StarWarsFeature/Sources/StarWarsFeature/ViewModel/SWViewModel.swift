@@ -3,7 +3,7 @@ import Foundation
 import Combine
 
 extension SWPlanetViewModel {
-	public enum SWAction: Hashable {
+	public enum Action: Hashable {
 		case onAppear
 		case refresh
 		case selectPlanet(String)
@@ -21,7 +21,7 @@ public final class SWPlanetViewModel: ObservableObject {
 	
 	private(set) var cancellables: Set<AnyCancellable> = []
 	
-	private var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
+	private var inFlightTasks: [Action: Task<Void, Never>] = [:]
 	private let service: SWAPIProvider
 	
 	deinit {
@@ -49,7 +49,7 @@ public final class SWPlanetViewModel: ObservableObject {
 			.store(in: &cancellables)
 	}
 	
-	public func dispatch(_ action: SWAction) async {
+	public func dispatch(_ action: Action) async {
 		switch action {
 		case .onAppear, .didTapPill(0):
 			await handleOnAppear()
@@ -83,7 +83,7 @@ public final class SWPlanetViewModel: ObservableObject {
 		}
 	}
 	
-	private func fetchPlanets(_ action: SWAction) async {
+	private func fetchPlanets(_ action: Action) async {
 		await withTask(for: action, showLoading: action == .onAppear || action == .refresh) {
 			let response = try await self.service.fetchPlanets()
 			self.model = response
@@ -93,7 +93,7 @@ public final class SWPlanetViewModel: ObservableObject {
 
 extension SWPlanetViewModel {
 	private func withTask(
-		for action: SWAction,
+		for action: Action,
 		showLoading: Bool = false,
 		operation: @escaping () async throws -> Void
 	) async {

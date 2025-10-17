@@ -1,7 +1,7 @@
 import SwiftUI
 
 extension SWFilmViewModel {
-	public enum SWAction: Hashable {
+	public enum Action: Hashable {
 		case onAppear
 	}
 }
@@ -14,7 +14,7 @@ public final class SWFilmViewModel: ObservableObject, SWViewModelProtocol {
 	@Published public var isLoading: Bool = false
 	@Published public var error: SWError?
 	
-	var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
+	var inFlightTasks: [Action: Task<Void, Never>] = [:]
 	private let service: SWAPIProvider
 	
 	deinit {
@@ -32,7 +32,7 @@ public final class SWFilmViewModel: ObservableObject, SWViewModelProtocol {
 		self.error = error
 	}
 	
-	public func dispatch(_ action: SWAction) async {
+	public func dispatch(_ action: Action) async {
 		switch action {
 		case .onAppear:
 			do {

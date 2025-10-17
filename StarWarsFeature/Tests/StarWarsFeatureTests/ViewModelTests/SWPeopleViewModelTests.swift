@@ -46,7 +46,7 @@ final class SWPeopleViewModelTests: XCTestCase {
 	func testSelectPlanet() async throws {
 		await viewModel.dispatch(.onAppear)
 		
-		let personId = viewModel.model.results.first!.id
+		let personId = try XCTUnwrap(viewModel.model.results.first?.id)
 		await viewModel.dispatch(.selectPerson(personId))
 	}
 	

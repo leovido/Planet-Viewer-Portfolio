@@ -3,7 +3,7 @@ import SwiftUI
 import Foundation
 
 extension SWPeopleViewModel {
-	public enum SWAction: Hashable {
+	public enum Action: Hashable {
 		case onAppear
 		case refresh
 		case selectPerson(String)
@@ -20,7 +20,7 @@ public final class SWPeopleViewModel: SWViewModelProtocol, ObservableObject {
 	
 	@Published public var peopleListItems: [PersonListItem] = []
 	
-	var inFlightTasks: [SWAction: Task<Void, Never>] = [:]
+	var inFlightTasks: [Action: Task<Void, Never>] = [:]
 	private let service: SWAPIProvider
 	
 	private(set) var cancellables: Set<AnyCancellable> = []
@@ -50,7 +50,7 @@ public final class SWPeopleViewModel: SWViewModelProtocol, ObservableObject {
 			.store(in: &cancellables)
 	}
 	
-	public func dispatch(_ action: SWAction) async {
+	public func dispatch(_ action: Action) async {
 		switch action {
 		case .onAppear, .didTapPill(0):
 			await handleOnAppear()
@@ -85,71 +85,10 @@ public final class SWPeopleViewModel: SWViewModelProtocol, ObservableObject {
 		}
 	}
 	
-	private func fetchPeople(_ action: SWAction) async {
+	private func fetchPeople(_ action: Action) async {
 		await withTask(for: action, showLoading: action == .onAppear) {
 			let response = try await self.service.fetchPeople()
 			self.model = response
 		}
-	}
-}
-
-@MainActor
-protocol SWViewModelProtocol: AnyObject {
-	associatedtype SWAction: Hashable
-	
-	var isLoading: Bool { get set }
-	var error: SWError? { get set }
-	var inFlightTasks: [SWAction: Task<Void, Never>] { get set }
-	
-	func withTask(
-		for action: SWAction,
-		showLoading: Bool,
-		operation: @escaping () async throws -> Void
-	) async
-}
-
-extension SWViewModelProtocol {
-	func withTask(
-		for action: SWAction,
-		showLoading: Bool = false,
-		operation: @escaping () async throws -> Void
-	) async {
-		error = nil
-
-		if let existingTask = inFlightTasks[action] {
-			existingTask.cancel()
-			inFlightTasks.removeValue(forKey: action)
-		}
-		
-		let task = Task { [weak self] in
-			guard let self = self else { return }
-			
-			do {
-				if showLoading {
-					self.isLoading = true
-				}
-				
-				try await operation()
-				
-				guard !Task.isCancelled else {
-					return
-				}
-				
-				self.isLoading = false
-				
-			} catch {
-				guard !Task.isCancelled else {
-					return
-				}
-				
-				self.error = SWError.message(error.localizedDescription)
-				self.isLoading = false
-			}
-		}
-		
-		inFlightTasks[action] = task
-		// Wait for task completion and then remove from dictionary
-		await task.value
-		inFlightTasks.removeValue(forKey: action)
 	}
 }
