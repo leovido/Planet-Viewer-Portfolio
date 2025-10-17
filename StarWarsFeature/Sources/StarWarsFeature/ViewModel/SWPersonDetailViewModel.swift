@@ -15,7 +15,7 @@ public final class SWPersonDetailViewModel: ObservableObject {
 		case loadPerson(String)
 	}
 	
-	private func updateDetailState(with person: SWPeople) {
+	public func updateDetailState(with person: SWPeople) {
 		self.name = person.name
 		self.height = person.height
 		self.mass = person.mass
