@@ -6,20 +6,21 @@ final class Networking {
 			.appending(path: endpoint.rawValue) else {
 			throw SWError.invalidURL
 		}
-
+		
 		var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
 		urlComponents?.queryItems = [
 			URLQueryItem(name: "expanded", value: "true")
 		]
 		
-		guard let urlComponents = urlComponents else {
+		guard let urlComponents = urlComponents,
+			  let url = urlComponents.url else {
 			throw SWError.invalidURL
 		}
 		
-		let (data, response) = try await URLSession.shared.data(for: URLRequest(url: urlComponents.url!))
+		let (data, response) = try await URLSession.shared.data(for: URLRequest(url: url))
 		
 		guard let response = response as? HTTPURLResponse,
-					(200...399).contains(response.statusCode) else {
+			  (200...399).contains(response.statusCode) else {
 			throw SWError.invalidResponse
 		}
 		
