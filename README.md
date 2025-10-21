@@ -11,10 +11,10 @@ The app demonstrates modern iOS development practices including MVVM architectur
 
 ## Screenshots
 <p>
-   <img src="https://github.com/user-attachments/assets/d887cdfa-6264-4d8b-a34a-87837bdf96f8" width="45%" />
-   <img src="https://github.com/user-attachments/assets/00ff5271-1f79-4da8-94e0-7e27ee36163e" width="45%" />
+   <img src="https://github.com/user-attachments/assets/d887cdfa-6264-4d8b-a34a-87837bdf96f8" width="33%" />
+   <img src="https://github.com/user-attachments/assets/e7ebfb55-15e5-403c-a685-1e0ea2bb3fc6" width="33%" />
+   <img src="https://github.com/user-attachments/assets/00ff5271-1f79-4da8-94e0-7e27ee36163e" width="33%" />
 </p>
-
 
 ## Features
 
