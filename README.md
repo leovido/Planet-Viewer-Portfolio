@@ -1,7 +1,7 @@
 # SWPlanetViewer
 
 ![Swift](https://img.shields.io/badge/Swift-6.0-orange.svg)
-![Platform](https://img.shields.io/badge/Platform-iOS%2017.0-blue.svg)
+![Platform](https://img.shields.io/badge/Platform-iOS%2026.0-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 [![codecov](https://codecov.io/gh/leovido/Planet-Viewer-Portfolio/graph/badge.svg?token=1K0T5BFDQB)](https://codecov.io/gh/leovido/Planet-Viewer-Portfolio)
 
@@ -9,9 +9,10 @@ A SwiftUI application that allows users to browse planets from the Star Wars uni
 
 The app demonstrates modern iOS development practices including MVVM architecture, SwiftUI, Combine, and modular design.
 
+## Screenshots
 <p>
-<img src="./Screenshots/MainView.png" width="45%" style="" />
-<img src="./Screenshots/DetailView.png" width="45%" />
+   <img src="https://github.com/user-attachments/assets/d887cdfa-6264-4d8b-a34a-87837bdf96f8" width="45%" />
+   <img src="https://github.com/user-attachments/assets/00ff5271-1f79-4da8-94e0-7e27ee36163e" width="45%" />
 </p>
 
 
