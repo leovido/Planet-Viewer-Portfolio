@@ -8,35 +8,42 @@ public struct FilmView: View {
 	}
 	
 	public var body: some View {
-		ScrollView {
-			LazyVStack(spacing: 0) {
-				ForEach(viewModel.filmListItems) { film in
-					FilmCardView(model: film)
-						.padding(.vertical, 4)
+		NavigationStack {
+			ZStack {
+				StarfieldBackground()
+
+				ScrollView {
+					LazyVStack(spacing: 0) {
+						ForEach(viewModel.filmListItems) { film in
+							FilmCardView(model: film)
+								.padding(.vertical, 4)
+						}
+					}
+				}
+				.task {
+					await viewModel.dispatch(.onAppear)
+				}
+				.navigationTitle(Text("Films"))
+				.overlay {
+					if viewModel.isLoading {
+						VStack {
+							Spacer()
+							ProgressView()
+							Spacer()
+						}
+					}
+				}
+				.overlay(alignment: .top) {
+					if let error = viewModel.error {
+						ContentUnavailableView(
+							"Film error",
+							systemImage: "film",
+							description: Text("An error occured: \(error.localizedDescription)"))
+					}
 				}
 			}
 		}
-		.task {
-			await viewModel.dispatch(.onAppear)
-		}
-		.navigationTitle(Text("Films"))
-		.overlay {
-			if viewModel.isLoading {
-				VStack {
-					Spacer()
-					ProgressView()
-					Spacer()
-				}
-			}
-		}
-		.overlay(alignment: .top) {
-			if let error = viewModel.error {
-				ContentUnavailableView(
-					"Film error",
-					systemImage: "film",
-					description: Text("An error occured: \(error.localizedDescription)"))
-			}
-		}
+		
 	}
 }
 

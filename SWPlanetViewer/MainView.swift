@@ -12,13 +12,11 @@ struct MainView: View {
 					}
 					.tag(0)
 				
-				NavigationStack {
-					FilmView(viewModel: .init())
-				}
-				.tabItem {
-					Label(LocalizedStringKey("Films"), systemImage: "film")
-				}
-				.tag(1)
+				FilmView(viewModel: .init())
+					.tabItem {
+						Label(LocalizedStringKey("Films"), systemImage: "film")
+					}
+					.tag(1)
 			}
 		}
 	}
