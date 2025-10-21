@@ -1,10 +1,10 @@
 import SwiftUI
 
 public struct StarfieldBackground: View {
-	var speed: Double = 0.02
-	var density: Int = 220
+	let speed: Double
+	let density: Int
 
-	public init(speed: Double, density: Int) {
+	public init(speed: Double = 0.02, density: Int = 220) {
 		self.speed = speed
 		self.density = density
 	}
